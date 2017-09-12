@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GiveMeTime</title>
+</head>
+<body style="font-size:16px">
+<img id="watch-screen" src="watch-screen.svg">
+</body>
+<script>
+    setInterval(function(){
+        document.getElementById('watch-screen').src = "watch-screen.svg?random="+new Date().getTime();
+    }, 1000);
+</script>
+</html>
