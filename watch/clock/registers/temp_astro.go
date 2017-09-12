@@ -3,7 +3,6 @@ package registers
 import (
 	"github.com/soniakeys/unit"
 	"time"
-	"github.com/soniakeys/meeus/globe"
 )
 
 var (
@@ -14,6 +13,8 @@ var (
 	SunSetTime       time.Time
 	SunSetAz         unit.Angle
 	SunlightDuration time.Duration
-	Position         globe.Coord
 	SunAz            unit.Angle
+	MoonPercent      float64
+	MoonRise         time.Time
+	MoonSet          time.Time
 )

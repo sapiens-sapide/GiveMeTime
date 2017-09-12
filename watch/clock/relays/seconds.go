@@ -8,7 +8,7 @@ func NewSecondsRelay(relays []Relay) *Seconds {
 	return &Seconds{
 		SteppingIntRelay{
 			steps: 60,
-			next: relays,
+			next:  relays,
 		},
 	}
 }

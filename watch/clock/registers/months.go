@@ -3,7 +3,7 @@ package registers
 import "sync"
 
 type Months struct {
-	lock sync.Mutex
+	lock    sync.Mutex
 	value   uint8 // range from 1 to 12
 	strings map[string][]string
 }

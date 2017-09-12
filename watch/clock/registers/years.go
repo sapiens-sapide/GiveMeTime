@@ -5,7 +5,7 @@ import (
 )
 
 type Years struct {
-	lock sync.Mutex
+	lock  sync.Mutex
 	value uint16
 }
 

@@ -14,8 +14,8 @@ import (
 type Oscillator interface {
 	Start() error
 	Stop() error
-	Subscribe(chan(bool)) *list.Element
-	Unsubscribe (*list.Element)
+	Subscribe(chan (bool)) *list.Element
+	Unsubscribe(*list.Element)
 }
 
 // for now, oscillator relies on GOlang's time.Ticker
@@ -26,7 +26,3 @@ func NewOscillator() (o Oscillator, err error) {
 
 	return o, nil
 }
-
-
-
-

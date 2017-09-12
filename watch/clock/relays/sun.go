@@ -8,7 +8,7 @@ func NewSunStepRelay(relays []Relay) *SunStep {
 	return &SunStep{
 		SteppingIntRelay{
 			steps: 20,
-			next: relays,
+			next:  relays,
 		},
 	}
 }

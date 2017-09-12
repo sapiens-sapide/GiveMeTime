@@ -1,34 +1,49 @@
 package astro
 
 import (
-	"time"
-	"math"
+	"github.com/soniakeys/meeus/globe"
+	pp "github.com/soniakeys/meeus/planetposition"
+	"github.com/soniakeys/unit"
 )
 
+const (
+	Rise = iota
+	Transit
+	Set
+	Yesterday = iota - 1
+	Today
+	Tomorrow
+)
 
-func Radians(degrees float64) float64 {
-	return degrees * math.Pi / 180
+/*
+TODO : refactor these var affectations
+*/
+var Position *globe.Coord
+var Sun *SunBody
+var Moon *MoonBody
+var Earth *pp.V87Planet
+
+type EclipticPosition struct {
+	long, lat unit.Angle
+	distance  float64 // distance between centers of the Earth and body, in AU
+	jd        float64 // julian date at which computation has been done
 }
 
-func Degrees(radians float64) float64 {
-	return radians * 180 / math.Pi
+type EquatorialPosition struct {
+	RA  unit.RA
+	Dec unit.Angle
+	jd  float64 // julian date at which computation has been done
 }
 
-// returns a time.Time from a decimal day
-// current time.Date is set by default from time.Now() if none is provided.
-func TimeFromDay(d float64, t... time.Time) time.Time {
-	seconds := int64(d * 24 * 60 * 60)
-	var local_time time.Time
-	if len(t) != 1 {
-		local_time = time.Now()
-	} else {
-		local_time = t[0]
-	}
-
-	return time.Date(local_time.Year(), local_time.Month(), local_time.Day(), 0, 0, 0, 0, local_time.Location()).Add(time.Duration(seconds) * time.Second)
+type CelestialBody interface {
+	EclipticPosition() EclipticPosition
+	EquatorialPosition() EquatorialPosition
 }
 
-// returns a decimal day from a time
-func DayFromTime(t time.Time) float64 {
-	return float64(t.Hour()*3600 + t.Minute()*60 + t.Second())/86400.0
+type TransitEvent struct {
+	Type int8 // rise=0, transit=1, set=2
+	Day  int8 // -1 for yesterday, 0 for today, 1 for tomorrow
+	Time unit.Time
+	Az   unit.Angle
+	Elev unit.Angle
 }

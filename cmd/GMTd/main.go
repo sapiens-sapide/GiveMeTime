@@ -1,9 +1,9 @@
 package main
 
 import (
-	"os"
-	"github.com/urfave/cli"
 	"github.com/sapiens-sapide/GiveMeTime/cmd/GMTd/cmds"
+	"github.com/urfave/cli"
+	"os"
 )
 
 func main() {

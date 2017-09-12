@@ -24,7 +24,7 @@ var Year *Years
 var YearLength *Days
 var Tz *TimeZones
 var Dst *DST
-var Sun *relays.SunStep
+var SunRelay *relays.SunStep
 
 // internal registers
 var Utime time.Time

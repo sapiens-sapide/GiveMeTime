@@ -21,7 +21,7 @@ func main() {
 		Lat: unit.NewAngle('+', 48, 51, 39),
 		Lon: unit.NewAngle('-', 2, 22, 1), //positive westward
 	}
-	now := time.Now()//.Add(-16*time.Hour).Add(-48*time.Minute)
+	now := time.Now() //.Add(-16*time.Hour).Add(-48*time.Minute)
 	_, tz := now.Zone()
 	fmt.Printf("time zone : %d\n", tz)
 	jd := julian.TimeToJD(now)
@@ -72,6 +72,5 @@ func main() {
 	fmt.Printf("True solar time : %s\n", tst)
 	sunHA := astro.SolarHourAngle(tst)
 	fmt.Printf("Sun Hour Angle : %f\n", sunHA)
-
 
 }

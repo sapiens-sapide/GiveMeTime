@@ -18,7 +18,7 @@ func init() {
 	reg.Hour = relays.NewHoursRelay([]relays.Relay{reg.Weekday, computers.NextDay})
 	reg.Minute = relays.NewMinutesRelay([]relays.Relay{reg.Hour})
 	reg.Second = relays.NewSecondsRelay([]relays.Relay{reg.Minute})
-	reg.Sun = relays.NewSunStepRelay([]relays.Relay{computers.SunPosition})
+	reg.SunRelay = relays.NewSunStepRelay([]relays.Relay{computers.SunPosition})
 	reg.Day = new(reg.Days)
 	reg.Day.Set(0)
 	reg.YearDay = new(reg.Days)
@@ -51,7 +51,7 @@ func StartSVGServer() {
 			web_svg.Disp.Reset()
 			web_svg.WriteSVG(&web_svg.Disp)
 			reg.Second.Trigger()
-			reg.Sun.Trigger()
+			reg.SunRelay.Trigger()
 		}
 	}()
 
@@ -85,5 +85,3 @@ func SVGserver(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "image/svg+xml")
 	web_svg.Disp.CopyTo(w)
 }
-
-

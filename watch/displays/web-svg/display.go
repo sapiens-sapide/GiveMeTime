@@ -1,14 +1,14 @@
 package web_svg
 
 import (
-	"sync"
-	"io"
 	"bytes"
+	"io"
+	"sync"
 )
 
 type Display struct {
 	lock sync.Mutex
-	buf bytes.Buffer
+	buf  bytes.Buffer
 }
 
 var Disp Display
@@ -16,7 +16,7 @@ var Disp Display
 func init() {
 	Disp = Display{
 		lock: sync.Mutex{},
-		buf: bytes.Buffer{},
+		buf:  bytes.Buffer{},
 	}
 	Disp.buf.Grow(4100)
 }

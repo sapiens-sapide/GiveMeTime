@@ -3,17 +3,17 @@ package relays
 type Weekdays struct {
 	SteppingIntRelay
 	strings map[string][]string // map holds languages strings for Weekdayss. Example {"fr-short":["lun", "mar", "mer", "jeu", "ven", "sam", "dim"]
-								// first weekday is monday = 1, sunday = 7.
+	// first weekday is monday = 1, sunday = 7.
 }
 
 func NewWeekdaysRelay(relays []Relay) *Weekdays {
 	return &Weekdays{
 		SteppingIntRelay: SteppingIntRelay{
 			steps: 7,
-			next: relays,
+			next:  relays,
 		},
 		strings: map[string][]string{
-			"fr-short":{"lun", "mar", "mer", "jeu", "ven", "sam", "dim"},
+			"fr-short": {"lun", "mar", "mer", "jeu", "ven", "sam", "dim"},
 		},
 	}
 }
