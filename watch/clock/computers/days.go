@@ -23,7 +23,7 @@ var NextDay = new(nextDay)
 func (nd nextDay) Trigger() {
 	ny, nm, nday, _ := NextDate(int(r.Year.Status().(uint16)), int(r.Month.Status().(uint8)), int(r.Day.Status().(uint16)))
 	r.SetDate(ny, nm, nday)
-	DayComputation(time.Now())
+	DayComputation(r.Now())
 }
 
 func (nd nextDay) Status() interface{} { return nil }
@@ -53,6 +53,11 @@ func DayComputation(now time.Time) {
 		fmt.Println(err)
 		return
 	}
+	/*astro.Position = &globe.Coord{
+		Lat: unit.NewAngle('+', 43, 29, 11.0),
+		Lon: unit.NewAngle('+', 110, 45, 22.9392), //positive westward
+	}*/
+
 	astro.Position = &globe.Coord{
 		Lat: unit.NewAngle('+', 48, 51, 39),
 		Lon: unit.NewAngle('-', 2, 22, 1), //positive westward
@@ -69,9 +74,9 @@ func DayComputation(now time.Time) {
 		return
 	}
 
-	r.SunRiseTime = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tRise)) * time.Second).Add(2 * time.Hour)
-	r.SunZenithTime = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tTransit)) * time.Second).Add(2 * time.Hour)
-	r.SunSetTime = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tSet)) * time.Second).Add(2 * time.Hour)
+	r.SunRiseTime = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tRise)) * time.Second).Add(time.Duration(r.Tz.Status().(int8)) * time.Hour)
+	r.SunZenithTime = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tTransit)) * time.Second).Add(time.Duration(r.Tz.Status().(int8))  * time.Hour)
+	r.SunSetTime = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tSet)) * time.Second).Add(time.Duration(r.Tz.Status().(int8))  * time.Hour)
 
 	sunrise_jd := julian.TimeToJD(r.SunRiseTime)
 	sunrise_az, _ := coord.EqToHz(astro.Sun.EquatorialPosition().RA, astro.Sun.EquatorialPosition().Dec, astro.Position.Lat, astro.Position.Lon, sidereal.Apparent(sunrise_jd))

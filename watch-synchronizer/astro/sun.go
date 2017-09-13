@@ -82,7 +82,7 @@ func (sun SunBody) ComputeTransit(pos globe.Coord) (tRise, tTransit, tSet unit.T
 	δ[2] = sun_tomorrow.eq.Dec
 	Th0 := sidereal.Apparent0UT(sun.Date)
 	ΔT := deltat.PolyAfter2000(float64(julian.JDToTime(sun.Date).Year()))
-	h0 := rise.Stdh0Solar
+	h0 := rise.Stdh0Solar // adjust this param to get twilight rise/set
 	return rise.Times(pos, ΔT, h0, Th0, α, δ)
 }
 

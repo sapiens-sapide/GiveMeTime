@@ -17,4 +17,5 @@ var (
 	MoonPercent      float64
 	MoonRise         time.Time
 	MoonSet          time.Time
+	MoonAz           unit.Angle
 )

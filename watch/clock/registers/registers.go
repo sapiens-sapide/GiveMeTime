@@ -25,6 +25,12 @@ var YearLength *Days
 var Tz *TimeZones
 var Dst *DST
 var SunRelay *relays.SunStep
+var MoonRelay *relays.MoonStep
 
 // internal registers
 var Utime time.Time
+
+// return a Go time from current values stored in registers.
+func Now() time.Time {
+	return time.Date(int(Year.Status().(uint16)), time.Month(Month.Status().(uint8)), int(Day.Status().(uint16)), int(Hour.Status().(uint8)), int(Minute.Status().(uint8)), int(Second.Status().(uint8)), 0, time.FixedZone("custom", int(Tz.Status().(int8)) * 3600))
+}

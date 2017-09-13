@@ -1,11 +1,11 @@
 package registers
 
-type TimeZones uint8
+type TimeZones int8
 
 func (tz *TimeZones) Set(value interface{}) {
 	*tz = TimeZones(value.(int))
 }
 
 func (tz TimeZones) Status() interface{} {
-	return tz
+	return int8(tz)
 }

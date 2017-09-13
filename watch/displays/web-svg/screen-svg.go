@@ -90,6 +90,11 @@ func WriteSVG(fd io.Writer) {
 	canvas.Gend()
 	canvas.Text(int(math.Floor(float64(width)*0.5)), int(math.Floor(float64(height)*0.55)), secondStr, "text-anchor:middle;font-family:courier;font-size:1.25em;fill:black")
 
+	//moon's azimuth
+	canvas.TranslateRotate(S/2, S/2, -90+reg.MoonAz.Deg())
+	canvas.Circle((S/2)-6, 0, 6, "fill:black;opacity:0.5")
+	canvas.Gend()
+
 	//day length arc
 	riseHourAngle := float64(reg.SunRiseTime.Hour()*3600+reg.SunRiseTime.Minute()*60) / 240.0
 	canvas.TranslateRotate(int(math.Floor(float64(width)*0.5)), int(math.Floor(float64(width)*0.5)), -90+riseHourAngle)

@@ -87,7 +87,7 @@ func (moon MoonBody) ComputeTransit(pos globe.Coord) (tRise, tTransit, tSet unit
 	δ[2] = moon_tomorrow.eq.Dec
 	Th0 := sidereal.Apparent0UT(moon.Date)
 	ΔT := deltat.PolyAfter2000(float64(julian.JDToTime(moon.Date).Year()))
-	h0 := rise.Stdh0Lunar(moonposition.Parallax(moon.ec.distance))
+	h0 := rise.Stdh0Lunar(moonposition.Parallax(moon.ec.distance)) // adjust this param to get 'twilight' rise/set
 	return rise.Times(pos, ΔT, h0, Th0, α, δ)
 }
 
