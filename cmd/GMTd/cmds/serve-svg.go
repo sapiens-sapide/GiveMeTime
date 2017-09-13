@@ -35,8 +35,8 @@ func init() {
 }
 
 func StartSVGServer() {
-	now := time.Now()
-	//now := time.Date(2017, 8, 21, 11, 0, 0, 0, time.UTC)
+	now := time.Now()//.Add(+13*time.Hour).Add(32*time.Minute)
+	//now := time.Date(2017, 9, 14, 4, 47, 0, 0, time.UTC)
 	reg.SetDate(now.Year(), int(now.Month()), now.Day())
 	//reg.SetDate(2017, 8, 21)
 	reg.SetTime(now.Hour(), now.Minute(), now.Second())

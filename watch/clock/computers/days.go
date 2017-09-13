@@ -105,8 +105,8 @@ func DayComputation(now time.Time) {
 		fmt.Println(err)
 		return
 	}
-	r.MoonRise = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tRise)) * time.Second).Add(2 * time.Hour)
-	r.MoonSet = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tSet)) * time.Second).Add(2 * time.Hour)
+	r.MoonRise = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tRise)) * time.Second).Add(time.Duration(r.Tz.Status().(int8))  * time.Hour)
+	r.MoonSet = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).Add(time.Duration(uint64(tSet)) * time.Second).Add(time.Duration(r.Tz.Status().(int8))  * time.Hour)
 
 	i := moonillum.PhaseAngle3(astro.Moon.Date)
 	r.MoonPercent = base.Illuminated(i)
