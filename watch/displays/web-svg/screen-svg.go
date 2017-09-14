@@ -8,6 +8,7 @@ import (
 	"io"
 	"math"
 	"time"
+	"strconv"
 )
 
 const (
@@ -27,8 +28,7 @@ func WriteSVG(fd io.Writer) {
 	//canvas.Rect(0, 0, S, 390, "fill:white;stroke:black;stroke-width:1") //large applewatch screen size
 
 	//watch outline
-	canvas.Circle(S/2, S/2, S/2, "fill:#C4C4C4")
-	canvas.Circle(S/2, S/2, int(math.Floor(S/2-1.2*fontSize)), "fill:white")
+	//canvas.Circle(S/2, S/2, S/2, "fill:#C4C4C4")
 	var circleStyle string
 
 	/*
@@ -56,6 +56,14 @@ func WriteSVG(fd io.Writer) {
 		"text-anchor:middle;font-family:courier;font-size:0.75em;fill:black")
 */
 
+	//day length arc
+	canvas.Circle(S/2, S/2, int(float64(width)*0.475), "stroke-width:0.9em;stroke:#C4C4C4;fill:none")
+	riseHourAngle := float64(reg.SunRiseTime.Hour()*3600+reg.SunRiseTime.Minute()*60) / 240.0
+	canvas.TranslateRotate(int(math.Floor(float64(width)*0.5)), int(math.Floor(float64(width)*0.5)), -90+riseHourAngle)
+	dayLengthPercent := float64(reg.SunlightDuration/time.Second) / 86400.0
+	circleStyle = fmt.Sprintf("stroke-width:1em;stroke-dasharray:%s;stroke:white;fill:none", gaugeParam(float64(width)*0.475, dayLengthPercent))
+	canvas.Circle(0, 0, int(float64(width)*0.475), circleStyle)
+	canvas.Gend()
 
 	//time
 	hoursAngle := float64(int(reg.Hour.Status().(uint8))*3600+int(reg.Minute.Status().(uint8))*60+int(reg.Second.Status().(uint8))) / 240.0
@@ -92,7 +100,7 @@ func WriteSVG(fd io.Writer) {
 	canvas.Text(int(math.Floor(S*0.53)), int(math.Floor(S*0.27)),
 		fmt.Sprintf("%02d", reg.Day.Status()),
 		"font-family:courier;font-weight:bold;font-size:3em;letter-spacing: -.05em;fill:black")
-
+/*
 	//moon's azimuth
 	if reg.MoonRise.Before(reg.MoonSet) {
 		if reg.Now().After(reg.MoonRise) && reg.Now().Before(reg.MoonSet) {
@@ -107,22 +115,16 @@ func WriteSVG(fd io.Writer) {
 			canvas.Gend()
 		}
 	}
+*/
 
 
-	//day length arc
-	riseHourAngle := float64(reg.SunRiseTime.Hour()*3600+reg.SunRiseTime.Minute()*60) / 240.0
-	canvas.TranslateRotate(int(math.Floor(float64(width)*0.5)), int(math.Floor(float64(width)*0.5)), -90+riseHourAngle)
-	dayLengthPercent := float64(reg.SunlightDuration/time.Second) / 86400.0
-	circleStyle = fmt.Sprintf("stroke-width:0.15em;stroke-dasharray:%s;stroke:red;fill:none", gaugeParam(float64(width)*0.497, dayLengthPercent))
-	canvas.Circle(0, 0, int(float64(width)*0.497), circleStyle)
-	canvas.Gend()
 
 	//noon mark
 	noonHourAngle := float64(reg.SunZenithTime.Hour()*3600+reg.SunZenithTime.Minute()*60) / 240.0
 	canvas.TranslateRotate(int(math.Floor(float64(width)*0.5)), int(math.Floor(float64(width)*0.5)), -90+noonHourAngle)
-	canvas.Rect(int(math.Floor(S/2-1.3*fontSize)), 0, int(math.Floor(0.6*fontSize)), 0.125*fontSize, "stroke: yellow; fill:yellow")
+	canvas.Rect(int(math.Floor(S/2-2.5*fontSize)), 0, int(math.Floor(0.95*fontSize)), 0.125*fontSize, "stroke: red; fill:red")
 	canvas.Gend()
-
+/*
 	//sunrise & sunset
 	drawSunMarker(canvas, reg.SunRiseAz)
 	drawSunMarker(canvas, reg.SunSetAz)
@@ -136,7 +138,7 @@ func WriteSVG(fd io.Writer) {
 		sun_az_str := fmt.Sprintf("%03.0f", reg.SunAz.Deg())
 		canvas.Text(S/2, int(math.Floor(S/1.315)), sun_az_str, "text-anchor:middle;font-family:courier;font-size:0.875em;fill:black")
 	}
-
+*/
 	//moon
 	/*
 	canvas.TranslateRotate(int(math.Floor(float64(width)*0.5)), int(math.Floor(float64(height)*0.2)), -90.0)
@@ -168,9 +170,11 @@ func WriteSVG(fd io.Writer) {
 
 	sunrise_str := fmt.Sprintf("%02d:%02d", reg.SunRiseTime.Hour(), reg.SunRiseTime.Minute())
 	sunset_str := fmt.Sprintf("%02d:%02d", reg.SunSetTime.Hour(), reg.SunSetTime.Minute())
+	canvas.Translate(0, -10)
 	canvas.Rect(int(math.Floor(float64(width)*0.27)), int(math.Floor(float64(height)*0.76)), int(math.Floor(float64(width)*0.16)), int(math.Floor(float64(height)*0.045)), "fill:white;opacity:0.9")
 	canvas.Rect(int(math.Floor(float64(width)*0.57)), int(math.Floor(float64(height)*0.76)), int(math.Floor(float64(width)*0.16)), int(math.Floor(float64(height)*0.045)), "fill:white;opacity:0.9")
-	canvas.Text(int(math.Floor(float64(width)*0.5)), int(math.Floor(float64(height)*0.8)), sunrise_str+"     "+sunset_str, "text-anchor:middle;font-family:courier;font-size:1em;fill:black")
+	canvas.Text(int(math.Floor(float64(width)*0.5)), int(math.Floor(float64(height)*0.8)), sunrise_str+" ↦ "+sunset_str, "text-anchor:middle;font-family:courier;font-size:1em;fill:black")
+	canvas.Gend()
 	/*
 	sunlight_str := fmt.Sprintf("%02dh%02dm", (reg.SunlightDuration/time.Minute)/60, reg.SunlightDuration/time.Minute-((reg.SunlightDuration/time.Minute)/60)*60)
 	canvas.Text(int(math.Floor(float64(width)*0.5)), int(math.Floor(float64(height)*0.83)), sunlight_str+" ["+dayLengthDiff+"s] ", "text-anchor:middle;font-family:courier;font-size:0.875em;fill:black")
@@ -179,10 +183,13 @@ func WriteSVG(fd io.Writer) {
 	*/
 
 	//cardinal markers
-	canvas.TranslateRotate(S/2, S/2, -90)
+	canvas.TranslateRotate(S/2, S/2, -120)
 	for i := 0; i < 12; i++ {
 		canvas.Rotate(30)
 		canvas.Rect(int(math.Floor(S/2-0.8*fontSize)), 0, int(math.Floor(0.8*fontSize)), 0.125*fontSize)
+		canvas.TranslateRotate(int(math.Floor(S*0.43)), 0, float64(90 - i*30))
+		canvas.Text(0, 5, strconv.Itoa(i*2), "text-anchor:middle;font-family:courier;font-size:0.666em;fill:black")
+		canvas.Gend()
 	}
 	for i := 0; i < 12; i++ {
 		canvas.Gend()
@@ -198,6 +205,8 @@ func WriteSVG(fd io.Writer) {
 	}
 	canvas.Gend()
 
+	// outer circle
+	canvas.Circle(S/2, S/2, int(math.Floor(S/2.005)), "fill:none;stroke:black;stroke-width:1")
 	canvas.End()
 }
 
@@ -213,3 +222,4 @@ func drawSunMarker(canvas *svg.SVG, az unit.Angle) {
 	canvas.Line(int(math.Floor(S/2-0.95*fontSize)), 0, S/2, 0, "stroke-width:0.1875em;stroke:yellow")
 	canvas.Gend()
 }
+
