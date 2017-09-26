@@ -54,6 +54,6 @@ function getEphemeris(date, position) {
     };
     const host = document.location.hostname;
     const enc_date = encodeURIComponent(toRFC3339string(date));
-    xhttp.open("GET", `http://${host}/ephemeris?lat=${position.lat}&lon=${position.lon}&date=${enc_date}`, true);
+    xhttp.open("GET", `https://${host}/ephemeris?lat=${position.lat}&lon=${position.lon}&date=${enc_date}`, true);
     xhttp.send();
 }
