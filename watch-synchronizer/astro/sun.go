@@ -62,7 +62,9 @@ func (sun SunBody) ComputeEquaPos() EquatorialPosition {
 }
 
 // must set jd & equatorial position before
-func (sun SunBody) ComputeTransit(pos globe.Coord) (tRise, tTransit, tSet unit.Time, err error) {
+// returned times are in seconds from midnight
+// alt is an optional param to adjust twilight rise/set. It must be given in minutes of angle (there are 60 min in a degree).
+func (sun SunBody) ComputeTransit(pos globe.Coord, alt... float64) (tRise, tTransit, tSet unit.Time, err error) {
 	α := make([]unit.RA, 3)
 	δ := make([]unit.Angle, 3)
 
@@ -82,8 +84,13 @@ func (sun SunBody) ComputeTransit(pos globe.Coord) (tRise, tTransit, tSet unit.T
 	δ[2] = sun_tomorrow.eq.Dec
 	Th0 := sidereal.Apparent0UT(sun.Date)
 	ΔT := deltat.PolyAfter2000(float64(julian.JDToTime(sun.Date).Year()))
-	h0 := rise.Stdh0Solar // adjust this param to get twilight rise/set
-	return rise.Times(pos, ΔT, h0, Th0, α, δ)
+	var h0 unit.Angle // adjust this param to get twilight rise/set
+	if len(alt) == 1 {
+		h0 = unit.AngleFromMin(-alt[0])
+	} else {
+		h0 = rise.Stdh0Solar
+	}
+	return rise.Times(pos, ΔT, h0, Th0, α, δ) //TODO : improve error handling, notably when error is 'Circumpolar'
 }
 
 // a helper to call two methods at a time

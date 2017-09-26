@@ -1,11 +1,11 @@
 package registers
 
-type TimeZones int8
+type TimeZones float32
 
 func (tz *TimeZones) Set(value interface{}) {
-	*tz = TimeZones(value.(int))
+	*tz = TimeZones(value.(float32))
 }
 
 func (tz TimeZones) Status() interface{} {
-	return int8(tz)
+	return float32(tz)
 }

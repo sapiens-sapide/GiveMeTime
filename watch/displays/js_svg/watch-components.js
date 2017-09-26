@@ -1,0 +1,353 @@
+/**
+ Designed for a 320x320px circular screen.
+ The viewbox is a 2unit x 2unit square, with origin (0,0) at center.
+ Top left corner is at x=-1,y=-1.
+ Within this referential, 1 unit = 160px.
+ **/
+const radius = 1;
+const unitbase = 0.1; // = 1 em = 16px
+const dot = 0.625e-2; // currently 1px
+const darkcolor = "#000000";
+const bluecolor = "#0D66FD";
+const redcolor = "#FB2733";
+const greycolor = "#656363";
+const fontFamily = "asapregular";
+const fontBold = "asapbold";
+const smallFontFamily = "robotoregular";
+const weekDays = ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"];
+const secondsRadius = (radius / 12) - (dot / 2);
+
+// returns the svg that represents the watchCase
+// for now, it's just the outer circle.
+function getWatchCase() {
+    const r = radius - (dot / 2);
+    const circEl = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    setAttributes(circEl, {
+        id: "case",
+        r: r,
+        stroke: darkcolor,
+        "stroke-width": dot,
+        fill: "#FFFFFF"
+    });
+    return circEl;
+}
+
+// returns the svg for an arc of `percent` of a full circle starting at the top middle of our viewport
+// NB : an arc of 100% will not render correctly. Use circle instead.
+// percent is a fraction of 1.
+// rad is the radius to scale to as a fraction of 1.
+function getArc(percent, strokeWidth, rad) {
+
+    const start = coordinatesForPercent(0, strokeWidth);
+    const end = coordinatesForPercent(percent, strokeWidth);
+    const largeArcFlag = percent > .5 ? 1 : 0;
+    const r = 1 - ((strokeWidth / 2) / radius);
+
+    const pathData = [
+        `M ${start[0] * rad} ${start[1] * rad}`,
+        `A ${r * rad} ${r * rad} 0 ${largeArcFlag} 1 ${end[0] * rad} ${end[1] * rad}`,
+    ].join(' ');
+
+    const arcEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    setAttributes(arcEl, {
+        d: pathData,
+        fill: "transparent",
+        stroke: greycolor,
+        "stroke-opacity": 0.3,
+        "stroke-width": strokeWidth
+    });
+    return arcEl;
+}
+
+// returns an svg arc representing the night length
+// sunrise and sunset are in minutes from midnight.
+function getNightArc(sunrise, sunset) {
+    const nightLength = 1440 - (sunset - sunrise);
+    const nightArc = getArc(nightLength / 1440, 15 * dot, radius);
+    const sunsetAngle = (sunset / 1440) * 360;
+    nightArc.setAttribute("transform", `rotate(${sunsetAngle})`);
+    return nightArc;
+}
+
+// returns an svg representing hours as markers around a circle
+// every other hour is written down as a number
+function getHoursCircle() {
+    //group for all components
+    const hc = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    hc.appendChild(getMarkersCircle());
+
+    //group for hours name, slightly shifted to the bottom
+    const hg = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    setAttributes(hg, {
+        transform: `translate(0, ${unitbase * 0.2})`
+    });
+    for (let i = 0; i < 12; i++) {
+        const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        const ang = 30 * i;
+        const coord = coordinatesForPercent(ang / 360, 48 * dot);
+        setAttributes(background, {
+            cx: coord[0],
+            cy: coord[1],
+            r: unitbase * 0.35,
+            fill: "#FFFFFF",
+            transform: "translate(0, -0.022)"
+        });
+        const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        setAttributes(txt, {
+            "class": "hoursNum",
+            x: coord[0],
+            y: coord[1],
+            "font-size": unitbase * 0.55,
+            style: `text-anchor: middle;font-family: ${smallFontFamily}`
+        });
+        txt.innerHTML = i * 2;
+        txtG.appendChild(background);
+        txtG.appendChild(txt);
+        hg.appendChild(txtG);
+    }
+    hc.appendChild(hg);
+    return hc;
+}
+
+// returns an svg representing markers distributed around a circle
+// there are 12 main markers + 12 small markers.
+function getMarkersCircle() {
+    const mg = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    for (let i = 0; i < 24; i++) {
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        const ang = (15 * i) - 75;
+        setAttributes(g, {
+            transform: `rotate(${ang})`
+        });
+        const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        const w = dot * (i % 2 === 0 ? 5 : 15);
+        const x = radius - w;
+        setAttributes(r, {
+            x: x - dot,
+            y: -dot / 2,
+            width: w,
+            height: dot,
+            fill: darkcolor,
+            stroke: darkcolor,
+            "stroke-width": dot
+        });
+        g.appendChild(r);
+        mg.appendChild(g);
+    }
+    return mg;
+}
+
+// returns an svg `text` components ready to render hours & minutes within.
+function getTimeContainer() {
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    setAttributes(txt, {
+        x: 0,
+        y: radius * 0.2,
+        style: `
+        text-anchor: middle;
+        font-family: ${fontBold};
+        font-size: ${6 * unitbase};
+        letter-spacing: ${-0.1 * unitbase};
+        fill: ${darkcolor};`
+    });
+    return txt;
+}
+
+// returns an svg `text` components ready to render weekday within.
+function getWeekDayContainer() {
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    setAttributes(txt, {
+        x: -0.01 * radius,
+        y: -0.5 * radius,
+        style: `
+        text-anchor: end;
+        font-family: ${fontFamily};
+        font-size: ${2 * unitbase};
+        fill: ${darkcolor}`
+    });
+    const background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    setAttributes(background, {
+        x: -0.36 * radius,
+        y: -0.66 * radius,
+        width: unitbase * 3.34,
+        height: unitbase * 1.7,
+        fill: "#FFFFFF",
+        "fill-opacity": 0.9,
+    });
+    return [background, txt];
+}
+
+// returns an svg `text` components ready to render date within.
+function getDateContainer() {
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    setAttributes(txt, {
+        x: 0.01 * radius,
+        y: -0.475 * radius,
+        style: `
+        text-anchor: start;
+        font-family: ${fontBold};
+        font-size: ${2.75 * unitbase};
+        fill: ${darkcolor}`
+    });
+    const background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    setAttributes(background, {
+        x: 0.02 * radius,
+        y: -0.675 * radius,
+        width: unitbase * 2.8,
+        height: unitbase * 2.1,
+        fill: "#FFFFFF",
+        "fill-opacity": 0.9,
+    });
+    return [background, txt];
+}
+
+// returns an svg `text` components ready to render sec within.
+function getSecContainer() {
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    setAttributes(txt, {
+        x: 0,
+        y: unitbase * 1.1,
+        style: `
+        text-anchor: middle;
+        font-family: ${fontFamily};
+        font-size: ${unitbase};
+        fill: ${darkcolor}`
+    });
+    return txt;
+}
+
+// returns svg elements to write sunrise & sunset to
+function getSunTimesElems() {
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    setAttributes(txt, {
+        x: -0.233 * radius,
+        y: 0.6 * radius,
+        style: `
+        text-anchor: center;
+        font-family: ${smallFontFamily};
+        font-size: ${1 * unitbase};
+        fill: ${darkcolor}`
+    });
+    const background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    setAttributes(background, {
+        x: -0.25 * radius,
+        y: 0.52 * radius,
+        width: unitbase * 5.4,
+        height: unitbase * 0.9,
+        fill: "#FFFFFF",
+        "fill-opacity": 0.7,
+    });
+    return [background, txt];
+}
+
+// returns the svg elements to render the seconds arc,
+// ie: the container and the inner circle.
+function getSecElems() {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    setAttributes(g, {
+        transform: `translate(0, ${unitbase * 0.7}) rotate(-90)`
+    });
+    const circEl = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    const dasharray = gaugeParam(secondsRadius, 0); // default settings to 0
+    setAttributes(circEl, {
+        r: secondsRadius,
+        stroke: darkcolor,
+        "stroke-width": dot * 2,
+        fill: "#FFFFFF",
+        "stroke-dasharray": dasharray[0] + " " + dasharray[1]
+    });
+    g.appendChild(circEl);
+    return [g, circEl];
+}
+
+function getMinutesHandle() {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    const thickness = dot * 3;
+    setAttributes(g, {
+        x: 0,
+        y: -thickness / 2,
+        width: radius - dot * 1,
+        height: thickness,
+        stroke: bluecolor,
+        "stroke-width": dot * 1,
+        fill: "#FFFFFF",
+        "fill-opacity": 0.7
+    });
+    return g;
+}
+
+function getHourHandle() {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    setAttributes(g, {
+        x1: 0,
+        y1: -7.7 * unitbase,
+        x2: 0,
+        y2: - radius * 0.97,
+        stroke: redcolor,
+        "stroke-width": dot * 8,
+        "stroke-linecap": "round"
+    });
+    return g;
+}
+
+function getNoonMark() {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    setAttributes(g, {
+        x1: 0,
+        y1: -0.70,
+        x2: 0,
+        y2: -0.89,
+        stroke: greycolor,
+        "stroke-width": dot * 2
+    });
+    return g;
+}
+
+/** below are temporary components to help design the clock **/
+function getOuterRect() {
+    const recEl = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    setAttributes(recEl, {
+        x: -1,
+        y: -1,
+        width: 2,
+        height: 2,
+        fill: "transparent",
+        stroke: darkcolor,
+        "stroke-width": dot
+    });
+    return recEl;
+}
+
+function getCrossLines() {
+    const cl = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    cl.appendChild(getVLine());
+    cl.appendChild(getHLine());
+    return cl;
+}
+
+function getVLine() {
+    const vLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    setAttributes(vLine, {
+        x1: 0,
+        y1: -1,
+        x2: 0,
+        y2: 1,
+        stroke: darkcolor,
+        "stroke-width": dot
+    });
+    return vLine;
+}
+
+function getHLine() {
+    const hLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    setAttributes(hLine, {
+        x1: -1,
+        y1: 0,
+        x2: 1,
+        y2: 0,
+        stroke: darkcolor,
+        "stroke-width": dot
+    });
+    return hLine;
+}

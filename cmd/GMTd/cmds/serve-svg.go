@@ -5,7 +5,7 @@ import (
 	"github.com/sapiens-sapide/GiveMeTime/watch/clock/computers"
 	reg "github.com/sapiens-sapide/GiveMeTime/watch/clock/registers"
 	"github.com/sapiens-sapide/GiveMeTime/watch/clock/relays"
-	"github.com/sapiens-sapide/GiveMeTime/watch/displays/web-svg"
+	"github.com/sapiens-sapide/GiveMeTime/watch/displays/go_svg"
 	"io"
 	"log"
 	"net/http"
