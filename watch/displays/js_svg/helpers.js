@@ -32,6 +32,7 @@ function toRFC3339string(date) {
     const abs_offset = Math.abs(tz);
     const tz_h = Math.floor(abs_offset / 60) < 10 ? "0" + Math.floor(abs_offset / 60) : Math.floor(abs_offset / 60);
     const tz_m = abs_offset % 60;
-    const tz_str = date.toISOString().substr(0, 19); // remove trailing 'Z' and nano seconds.
+    const date_shifted = new Date(Date.parse(date) + (tz * 60000));
+    const tz_str = date_shifted.toISOString().substr(0, 19); // remove trailing 'Z' and nano seconds.
     return tz_str + (tz > 0 ? "+" : "-") + tz_h + ":" + (tz_m < 10 ? "0" + tz_m : tz_m);
 }

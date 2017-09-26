@@ -50,7 +50,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //const t = new Date("2017-09-26T10:50:00");
+    //const t = new Date("2017-09-27T10:50:00");
     const t = new Date();
     const d = t.getDate();
     const h = t.getHours();
@@ -76,6 +76,19 @@ function dayRendering(date, position) {
     today.m = date.getMonth();
     today.d = date.getDate();
     today.wd = date.getDay();
-    getEphemeris(date, position);
+    getEphemeris(date, position, updateSunData);
 }
 
+function updateSunData() {
+    wdc[1].innerHTML = weekDays[today.wd];
+    dc[1].innerHTML = `${today.d < 10 ? "0" + today.d : today.d}`;
+    se[1].innerHTML = `${Math.floor(sun.rise / 60)}:${Math.floor(sun.rise % 60)} - ${Math.floor(sun.set / 60)}:${Math.floor(sun.set % 60)}`;
+    const noonAngle = (sun.zenith / 1440) * 360;
+    nm.setAttribute("transform", `rotate(${noonAngle})`);
+    svgEl.removeChild(civilNightLength);
+    civilNightLength = getNightArc(sun.civilRise, sun.civilSet);
+    svgEl.appendChild(civilNightLength);
+    svgEl.removeChild(nightLength);
+    nightLength = getNightArc(sun.rise, sun.set);
+    svgEl.appendChild(nightLength);
+}
