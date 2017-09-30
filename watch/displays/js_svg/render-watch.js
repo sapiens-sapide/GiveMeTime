@@ -4,31 +4,27 @@ let civilNightLength = document.createElement("div");
 svgEl.appendChild(civilNightLength);
 let nightLength = document.createElement("div");
 svgEl.appendChild(nightLength);
-const tc = getTimeContainer();
-svgEl.appendChild(tc);
 const hh = getHourHandle();
 svgEl.appendChild(hh);
 const mh = getMinutesHandle();
 svgEl.appendChild(mh);
+const secElems = getSecElems();
+svgEl.appendChild(secElems);
+const tc = getTimeContainer();
+svgEl.appendChild(tc);
+
 const nm = getNoonMark();
 svgEl.appendChild(nm);
-const se = getSunTimesElems();
-svgEl.appendChild(se[0]); // sun times background
-svgEl.appendChild(se[1]); // sun times container
 //svgEl.appendChild(getOuterRect());
 //svgEl.appendChild(getCrossLines());
 svgEl.appendChild(getHoursCircle());
-
 const wdc = getWeekDayContainer();
 svgEl.appendChild(wdc[0]); // weekday background
 svgEl.appendChild(wdc[1]); // weekday container
 const dc = getDateContainer();
 svgEl.appendChild(dc[0]); // date background
 svgEl.appendChild(dc[1]); // date container
-const secElems = getSecElems();
-svgEl.appendChild(secElems[0]);
-const sc = getSecContainer();
-svgEl.appendChild(sc);
+
 const now = new Date();
 let today = {
     y: now.getYear(),
@@ -50,18 +46,15 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //const t = new Date("2017-09-27T10:50:00");
+    //const t = new Date("2017-09-27T07:04:00");
     const t = new Date();
     const d = t.getDate();
     const h = t.getHours();
     const min = t.getMinutes();
     seconds = t.getSeconds();
-    tc.innerHTML = `${h < 10 ? "0" + h : h}  ${min < 10 ? "0" + min : min}`;
+    tc.innerHTML = `${h < 10 ? "0" + h : h} ${min < 10 ? "0" + min : min}`;
     secInHour = min * 60;
     secInDay = h * 3600 + secInHour;
-    sc.innerHTML = `${seconds < 10 ? "0" + seconds : seconds}`;
-    const dasharray = gaugeParam(secondsRadius, seconds / 60);
-    secElems[1].setAttribute("stroke-dasharray", dasharray[0] + " " + dasharray[1]);
     const minAngle = ((secInHour + seconds) / 3600) * 360;
     const hourAngle = ((secInDay + seconds) / 86400) * 360;
     mh.setAttribute("transform", `rotate(${minAngle - 90})`);
@@ -82,7 +75,6 @@ function dayRendering(date, position) {
 function updateSunData() {
     wdc[1].innerHTML = weekDays[today.wd];
     dc[1].innerHTML = `${today.d < 10 ? "0" + today.d : today.d}`;
-    se[1].innerHTML = `${Math.floor(sun.rise / 60)}:${Math.floor(sun.rise % 60)} - ${Math.floor(sun.set / 60)}:${Math.floor(sun.set % 60)}`;
     const noonAngle = (sun.zenith / 1440) * 360;
     nm.setAttribute("transform", `rotate(${noonAngle})`);
     svgEl.removeChild(civilNightLength);
