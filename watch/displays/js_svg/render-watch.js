@@ -1,29 +1,48 @@
 const svgEl = document.querySelector("#watchcase");
-svgEl.appendChild(getWatchCase());
-let civilNightLength = document.createElement("div");
-svgEl.appendChild(civilNightLength);
-let nightLength = document.createElement("div");
-svgEl.appendChild(nightLength);
-const hh = getHourHandle();
-svgEl.appendChild(hh);
-const mh = getMinutesHandle();
-svgEl.appendChild(mh);
-const secElems = getSecElems();
-svgEl.appendChild(secElems);
-const tc = getTimeContainer();
-svgEl.appendChild(tc);
 
+/** time components **/
+let civilNightLength = document.createElement("div");
+let nightLength = document.createElement("div");
+let timeOn = false;
+let sunOn = false;
+let MoonOn = false;
+const hh = getHourHandle();
+const mh = getMinutesHandle();
+const secElems = getSecElems();
+const tc = getTimeContainer();
 const nm = getNoonMark();
-svgEl.appendChild(nm);
-//svgEl.appendChild(getOuterRect());
-//svgEl.appendChild(getCrossLines());
-svgEl.appendChild(getHoursCircle());
 const wdc = getWeekDayContainer();
-svgEl.appendChild(wdc[0]); // weekday background
-svgEl.appendChild(wdc[1]); // weekday container
 const dc = getDateContainer();
-svgEl.appendChild(dc[0]); // date background
-svgEl.appendChild(dc[1]); // date container
+const hc = getHoursCircle();
+const wc = getWatchCase();
+const mc = getMarkersCircle();
+/** sun components **/
+const cc = getCompassCircle();
+const ste = getSunTimesElems();
+/** buttons components **/
+const b1 = getButton1();
+const b2 = getButton2();
+
+svgEl.appendChild(wc);
+svgEl.appendChild(civilNightLength);
+svgEl.appendChild(nightLength);
+timeDisplayOn();
+svgEl.appendChild(mc);
+
+/** buttons **/
+const svgButton = document.querySelector("#watchbuttons");
+svgButton.appendChild(b1);
+svgButton.appendChild(b2);
+
+b1.addEventListener("click", function () {
+    if (timeOn) {
+        timeDisplayOff();
+        sunDisplayOn();
+    } else if (sunOn) {
+        sunDisplayOff();
+        timeDisplayOn();
+    }
+});
 
 const now = new Date();
 let today = {
@@ -46,7 +65,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //const t = new Date("2017-09-27T07:04:00");
+    //const t = new Date("2017-09-26T13:34:20");
     const t = new Date();
     const d = t.getDate();
     const h = t.getHours();
@@ -75,12 +94,17 @@ function dayRendering(date, position) {
 function updateSunData() {
     wdc[1].innerHTML = weekDays[today.wd];
     dc[1].innerHTML = `${today.d < 10 ? "0" + today.d : today.d}`;
+    ste[1].innerHTML = `${Math.floor(sun.rise / 60)}:${Math.floor(sun.rise % 60)} - ${Math.floor(sun.set / 60)}:${Math.floor(sun.set % 60)}`;
     const noonAngle = (sun.zenith / 1440) * 360;
     nm.setAttribute("transform", `rotate(${noonAngle})`);
-    svgEl.removeChild(civilNightLength);
+    if (timeOn) {
+        svgEl.removeChild(civilNightLength);
+        svgEl.removeChild(nightLength);
+    }
     civilNightLength = getNightArc(sun.civilRise, sun.civilSet);
-    svgEl.appendChild(civilNightLength);
-    svgEl.removeChild(nightLength);
     nightLength = getNightArc(sun.rise, sun.set);
-    svgEl.appendChild(nightLength);
+    if (timeOn) {
+        svgEl.appendChild(civilNightLength);
+        svgEl.appendChild(nightLength);
+    }
 }

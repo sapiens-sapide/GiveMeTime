@@ -32,6 +32,42 @@ function getWatchCase() {
     return circEl;
 }
 
+function timeDisplayOn() {
+    svgEl.appendChild(civilNightLength);
+    svgEl.appendChild(nightLength);
+    svgEl.appendChild(hh);
+    svgEl.appendChild(mh);
+    svgEl.appendChild(secElems);
+    svgEl.appendChild(tc);
+    svgEl.appendChild(nm);
+//svgEl.appendChild(getOuterRect());
+//svgEl.appendChild(getCrossLines());
+    svgEl.appendChild(wdc[0]); // weekday background
+    svgEl.appendChild(wdc[1]); // weekday container
+    svgEl.appendChild(dc[0]); // date background
+    svgEl.appendChild(dc[1]); // date container
+    svgEl.appendChild(hc);
+    timeOn = true;
+}
+
+function timeDisplayOff() {
+    svgEl.removeChild(civilNightLength);
+    svgEl.removeChild(nightLength);
+    svgEl.removeChild(hh);
+    svgEl.removeChild(mh);
+    svgEl.removeChild(secElems);
+    svgEl.removeChild(tc);
+    svgEl.removeChild(nm);
+//svgEl.removeChild(getOuterRect());
+//svgEl.removeChild(getCrossLines());
+    svgEl.removeChild(wdc[0]); // weekday background
+    svgEl.removeChild(wdc[1]); // weekday container
+    svgEl.removeChild(dc[0]); // date background
+    svgEl.removeChild(dc[1]); // date container
+    svgEl.removeChild(hc);
+    timeOn = false;
+}
+
 // returns the svg for an arc of `percent` of a full circle starting at the top middle of our viewport
 // NB : an arc of 100% will not render correctly. Use circle instead.
 // percent is a fraction of 1.
@@ -74,7 +110,7 @@ function getNightArc(sunrise, sunset) {
 function getHoursCircle() {
     //group for all components
     const hc = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    hc.appendChild(getMarkersCircle());
+    //hc.appendChild(getMarkersCircle());
 
     //group for hours name, slightly shifted to the bottom
     const hg = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -202,30 +238,6 @@ function getDateContainer() {
     return [background, txt];
 }
 
-// returns svg elements to write sunrise & sunset to
-function getSunTimesElems() {
-    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    setAttributes(txt, {
-        x: -0.233 * radius,
-        y: 0.6 * radius,
-        style: `
-        text-anchor: center;
-        font-family: ${smallFontFamily};
-        font-size: ${1 * unitbase};
-        fill: ${darkcolor}`
-    });
-    const background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    setAttributes(background, {
-        x: -0.25 * radius,
-        y: 0.52 * radius,
-        width: unitbase * 5.4,
-        height: unitbase * 0.9,
-        fill: "#FFFFFF",
-        "fill-opacity": 0.7,
-    });
-    return [background, txt];
-}
-
 // returns the svg elements to render the seconds arc,
 // ie: the container and the inner circle.
 function getSecElems() {
@@ -245,12 +257,12 @@ function getSecElems() {
     const c2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     //const dasharray = gaugeParam(secondsRadius, 0); // default settings to 0
     setAttributes(c2, {
-        r: secondsRadius*14.3,
-        //stroke: darkcolor,
+        r: secondsRadius * 14.3,
+        //stroke: greycolor,
         //"stroke-width": dot,
         //"stroke-opacity": 0.1,
         fill: "#FFFFFF",
-        "fill-opacity": 0.7
+        "fill-opacity": 0.5
         //"stroke-dasharray": dasharray[0] + " " + dasharray[1]
     });
     g.appendChild(c2);
@@ -292,7 +304,7 @@ function getHourHandle() {
         x1: 0,
         y1: -7.4 * unitbase,
         x2: 0,
-        y2: - radius * 0.97,
+        y2: -radius * 0.97,
         stroke: redcolor,
         "stroke-width": dot * 8,
         "stroke-linecap": "round"
@@ -359,4 +371,54 @@ function getHLine() {
         "stroke-width": dot
     });
     return hLine;
+}
+
+function getButton1() {
+    const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    setAttributes(txtG, {
+        "class": "button"
+    });
+    const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    setAttributes(background, {
+        cx: -radius * 1.3,
+        cy: -radius * 0.3,
+        r: unitbase * 4,
+        fill: "#FFFFFF",
+        "class": "button"
+    });
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    setAttributes(txt, {
+        "class": "buttonTxt",
+        x: -radius * 1.3,
+        y: -radius * 0.2,
+        "font-size": unitbase * 3,
+        style: `text-anchor: middle;font-family: ${fontFamily}`,
+    });
+    txt.innerHTML = "Sun";
+    txtG.appendChild(background);
+    txtG.appendChild(txt);
+    return txtG;
+}
+
+function getButton2() {
+    const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    setAttributes(background, {
+        cx: radius * 1.3,
+        cy: -radius * 0.3,
+        r: unitbase * 4,
+        fill: "#FFFFFF",
+    });
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    setAttributes(txt, {
+        "class": "buttonTxt",
+        x: radius * 1.3,
+        y: -radius * 0.2,
+        "font-size": unitbase * 3,
+        style: `text-anchor: middle;font-family: ${fontFamily}`
+    });
+    txt.innerHTML = "Moon";
+    txtG.appendChild(background);
+    txtG.appendChild(txt);
+    return txtG;
 }
