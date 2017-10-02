@@ -22,12 +22,15 @@ const ste = getSunTimesElems();
 /** buttons components **/
 const b1 = getButton1();
 const b2 = getButton2();
+/** sync logic **/
+let ephemDaysLeft = -1; // how many days ahead are in local storage. -1 means no data for current day.
 
 svgEl.appendChild(wc);
 svgEl.appendChild(civilNightLength);
 svgEl.appendChild(nightLength);
 timeDisplayOn();
 svgEl.appendChild(mc);
+svgEl.appendChild(nm);
 
 /** buttons **/
 const svgButton = document.querySelector("#watchbuttons");
@@ -44,13 +47,12 @@ b1.addEventListener("click", function () {
     }
 });
 
-const now = new Date();
 let today = {
-    y: now.getYear(),
-    m: now.getMonth(),
-    d: now.getDate(),
-    wd: now.getDay()
+    d: 0
 };
+today.d = 0;
+let hour = 0;
+let min = 0;
 let seconds = 60;
 let secInHour = 0;
 let secInDay = 0;
@@ -58,53 +60,67 @@ const position = {
     lon: -2.366944,
     lat: 48.860833
 };
-dayRendering(now, position);
+//dayRendering(now, position);
 secondRendering();
 setInterval(() => {
     secondRendering()
 }, 1000);
 
 function secondRendering() {
-    //const t = new Date("2017-09-26T13:34:20");
-    const t = new Date();
-    const d = t.getDate();
-    const h = t.getHours();
-    const min = t.getMinutes();
-    seconds = t.getSeconds();
-    tc.innerHTML = `${h < 10 ? "0" + h : h} ${min < 10 ? "0" + min : min}`;
-    secInHour = min * 60;
-    secInDay = h * 3600 + secInHour;
+    //today.now = new Date("2017-10-01T03:34:20");
+    today.now = new Date();
+    if (seconds > 59) {
+        minuteRendering();
+    } else {
+        seconds++
+    }
     const minAngle = ((secInHour + seconds) / 3600) * 360;
     const hourAngle = ((secInDay + seconds) / 86400) * 360;
     mh.setAttribute("transform", `rotate(${minAngle - 90})`);
     hh.setAttribute("transform", `rotate(${hourAngle})`);
-    if (d !== today.d) {
-        dayRendering(t, position);
+}
+
+function minuteRendering() {
+    hour = today.now.getHours();
+    min = today.now.getMinutes();
+    seconds = today.now.getSeconds();
+    secInHour = min * 60;
+    secInDay = hour * 3600 + secInHour;
+    if (ephemDaysLeft === -1 || today.d !== today.now.getDate()) {
+        dayRendering(position);
     }
+    tc.innerHTML = `${hour < 10 ? "0" + hour : hour} ${min < 10 ? "0" + min : min}`;
 }
 
-function dayRendering(date, position) {
-    today.y = date.getYear();
-    today.m = date.getMonth();
-    today.d = date.getDate();
-    today.wd = date.getDay();
-    getEphemeris(date, position, updateSunData);
-}
-
-function updateSunData() {
+function dayRendering(position) {
+    today.y = today.now.getFullYear();
+    today.m = today.now.getMonth();
+    today.d = today.now.getDate();
+    today.wd = today.now.getDay();
     wdc[1].innerHTML = weekDays[today.wd];
-    dc[1].innerHTML = `${today.d < 10 ? "0" + today.d : today.d}`;
-    ste[1].innerHTML = `${Math.floor(sun.rise / 60)}:${Math.floor(sun.rise % 60)} - ${Math.floor(sun.set / 60)}:${Math.floor(sun.set % 60)}`;
-    const noonAngle = (sun.zenith / 1440) * 360;
-    nm.setAttribute("transform", `rotate(${noonAngle})`);
-    if (timeOn) {
-        svgEl.removeChild(civilNightLength);
-        svgEl.removeChild(nightLength);
-    }
-    civilNightLength = getNightArc(sun.civilRise, sun.civilSet);
-    nightLength = getNightArc(sun.rise, sun.set);
-    if (timeOn) {
-        svgEl.appendChild(civilNightLength);
-        svgEl.appendChild(nightLength);
+    dc[1].innerHTML = `${today.d < 10 ? " " + today.d : today.d}`;
+    getEphemeris(today.now, position, updateSunData);
+}
+
+function updateSunData(syncSucceeded) {
+    if (syncSucceeded) {
+        ephemDaysLeft = 0; // TODO: manage local storage when more days will be provided by sync service
+        ste[1].innerHTML = `${Math.floor(sun.rise / 60)}:${Math.floor(sun.rise % 60)} - ${Math.floor(sun.set / 60)}:${Math.floor(sun.set % 60)}`;
+        const noonAngle = (sun.zenith / 1440) * 360;
+        nm.setAttribute("transform", `rotate(${noonAngle})`);
+        if (timeOn) {
+            svgEl.removeChild(civilNightLength);
+            svgEl.removeChild(nightLength);
+        }
+        civilNightLength = getNightArc(sun.civilRise, sun.civilSet);
+        nightLength = getNightArc(sun.rise, sun.set);
+        if (timeOn) {
+            svgEl.appendChild(civilNightLength);
+            svgEl.appendChild(nightLength);
+        }
+    } else {
+        ephemDaysLeft = -1;
+        ste[1].innerHTML = "";
+        svgEl.removeChild(nm);
     }
 }

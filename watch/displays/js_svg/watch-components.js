@@ -39,7 +39,9 @@ function timeDisplayOn() {
     svgEl.appendChild(mh);
     svgEl.appendChild(secElems);
     svgEl.appendChild(tc);
-    svgEl.appendChild(nm);
+    if (ephemDaysLeft !== -1) {
+        svgEl.appendChild(nm);
+    }
 //svgEl.appendChild(getOuterRect());
 //svgEl.appendChild(getCrossLines());
     svgEl.appendChild(wdc[0]); // weekday background
@@ -57,7 +59,9 @@ function timeDisplayOff() {
     svgEl.removeChild(mh);
     svgEl.removeChild(secElems);
     svgEl.removeChild(tc);
-    svgEl.removeChild(nm);
+    if (ephemDaysLeft !== -1) {
+        svgEl.removeChild(nm);
+    }
 //svgEl.removeChild(getOuterRect());
 //svgEl.removeChild(getCrossLines());
     svgEl.removeChild(wdc[0]); // weekday background

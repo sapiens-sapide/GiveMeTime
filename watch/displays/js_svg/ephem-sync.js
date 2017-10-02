@@ -29,15 +29,15 @@ function getEphemeris(date, position, callback) {
                 sun.zenith = resp.Sun.Zenith;
                 sun.set = resp.Sun.Set;
                 sun.civilSet = resp.Sun.CivilSet;
+                callback(true);
             } else {
-                console.log(this.response);
                 sun.rise = 0;
                 sun.civilRise = 0;
                 sun.zenith = 0;
                 sun.set = 0;
                 sun.civilSet = 0;
+                callback(false);
             }
-            callback();
         }
     };
     const host = document.location.hostname;
