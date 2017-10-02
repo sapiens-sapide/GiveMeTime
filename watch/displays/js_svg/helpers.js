@@ -1,8 +1,10 @@
 // helper to set attributes from an object.
 function setAttributes(elem, attr) {
-    Object.entries(attr).forEach(([key, value]) => {
-        elem.setAttribute(key, value);
-    })
+    for (let prop in attr) {
+        if (attr.hasOwnProperty(prop)) {
+            elem.setAttribute(prop, attr[prop]);
+        }
+    }
 }
 
 // returns coordinates within our referential to draw an arc of `percent` of a circle
