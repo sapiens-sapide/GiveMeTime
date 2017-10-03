@@ -2,79 +2,85 @@ package astro
 
 import (
 	"fmt"
-	"github.com/soniakeys/meeus/deltat"
+	"github.com/soniakeys/meeus/coord"
 	"github.com/soniakeys/meeus/eqtime"
 	"github.com/soniakeys/meeus/globe"
 	"github.com/soniakeys/meeus/julian"
 	pp "github.com/soniakeys/meeus/planetposition"
-	"github.com/soniakeys/meeus/rise"
 	"github.com/soniakeys/meeus/sidereal"
 	"github.com/soniakeys/meeus/solar"
-	"github.com/soniakeys/unit"
 	"math"
 	"os"
 	"time"
+	"github.com/soniakeys/unit"
+	"github.com/soniakeys/meeus/deltat"
+	"github.com/soniakeys/meeus/rise"
 )
 
 type SunBody struct {
-	// day data
-	Date   float64 // julian date at which the numbers below have been calculated
-	ec     EclipticPosition
-	eq     EquatorialPosition
-	Events [3]TransitEvent // rise, zenith, set
-	// instant data
-	Moment         float64 // time for which the numbers below have been calculated
-	Az, Elev, Dist float64
+	observer *Observer
+	ec       EclipticPosition
+	eq       EquatorialPosition
+	ap       ApparentPosition
 }
 
-func NewSun(t time.Time) *SunBody {
-	// set time at beginning of the day for astronomical calculation.
-	jd0 := julian.CalendarGregorianToJD(t.Year(), int(t.Month()), float64(t.Day()))
-	return &SunBody{
-		Date:   jd0,
-		Events: [3]TransitEvent{},
-	}
+// NewSun returns a SunBody for given observer
+func NewSun(o *Observer) *SunBody {
+	s := new(SunBody)
+	s.observer = o
+	s.ComputePositions()
+	return s
 }
 
-func (sun SunBody) ComputeEclPos(t time.Time) EclipticPosition {
-	jde := julian.TimeToJD(t)
-	long, lat, dist := solar.TrueVSOP87(Earth, jde)
+// a helper to call tree methods at a time
+// positions must be computed in order
+func (sun *SunBody) ComputePositions() {
+	sun.ec = sun.ComputeEclPos()
+	sun.eq = sun.ComputeEquaPos()
+	sun.ap = sun.ComputeApparentPos()
+}
+
+func (sun SunBody) ComputeEclPos() EclipticPosition {
+	long, lat, dist := solar.TrueVSOP87(sun.observer.earth, sun.observer.JulianDate)
 	return EclipticPosition{
 		long:     long,
 		lat:      lat,
 		distance: dist,
-		jd:       jde,
 	}
 }
 
-// Ecliptic position must be set before
+// Ecliptic position must be computed before
 func (sun SunBody) ComputeEquaPos() EquatorialPosition {
-	if sun.ec.jd == 0 {
-		// TODO : better error handling
-		return EquatorialPosition{}
-	}
 	α, δ := EclToEqu(&sun)
 	return EquatorialPosition{
 		RA:  α,
 		Dec: δ,
-		jd:  sun.ec.jd,
+	}
+}
+
+// Equatorial position must be computed before
+func (sun SunBody) ComputeApparentPos() ApparentPosition {
+	az, el := coord.EqToHz(sun.eq.RA, sun.eq.Dec, sun.observer.Position.Lat, sun.observer.Position.Lon, sidereal.Apparent(sun.JD()))
+	return ApparentPosition{
+		Az: az.Deg() + 180,
+		Elev: el.Deg(),
 	}
 }
 
 // must set jd & equatorial position before
 // returned times are in seconds from midnight
-// alt is an optional param to adjust twilight rise/set. It must be given in minutes of angle (there are 60 min in a degree).
-func (sun SunBody) ComputeTransit(pos globe.Coord, alt... float64) (tRise, tTransit, tSet unit.Time, err error) {
+// alt is to adjust twilight rise/set. It must be given in minutes of angle (there are 60 min in a degree).
+func (sun SunBody) ComputeTransit(alt float64) (tRise, tTransit, tSet unit.Time, err error) {
 	α := make([]unit.RA, 3)
 	δ := make([]unit.Angle, 3)
 
-	yesterday := julian.JDToTime(sun.Date).Add(-24 * time.Hour)
-	sun_yesterday := NewSun(yesterday)
-	sun_yesterday.SetPositions(yesterday)
+	yesterday := julian.JDToTime(sun.JD()).Add(-24 * time.Hour)
+	o_y := NewObserver(yesterday, sun.observer.Position.Lat.Deg(), sun.observer.Position.Lon.Deg())
+	sun_yesterday := NewSun(o_y)
 
-	tomorrow := julian.JDToTime(sun.Date).Add(24 * time.Hour)
-	sun_tomorrow := NewSun(tomorrow)
-	sun_tomorrow.SetPositions(tomorrow)
+	tomorrow := julian.JDToTime(sun.JD()).Add(24 * time.Hour)
+	o_t := NewObserver(tomorrow, sun.observer.Position.Lat.Deg(), sun.observer.Position.Lon.Deg())
+	sun_tomorrow := NewSun(o_t)
 
 	α[0] = sun_yesterday.eq.RA
 	α[1] = sun.eq.RA
@@ -82,25 +88,15 @@ func (sun SunBody) ComputeTransit(pos globe.Coord, alt... float64) (tRise, tTran
 	δ[0] = sun_yesterday.eq.Dec
 	δ[1] = sun.eq.Dec
 	δ[2] = sun_tomorrow.eq.Dec
-	Th0 := sidereal.Apparent0UT(sun.Date)
-	ΔT := deltat.PolyAfter2000(float64(julian.JDToTime(sun.Date).Year()))
-	var h0 unit.Angle // adjust this param to get twilight rise/set
-	if len(alt) == 1 {
-		h0 = unit.AngleFromMin(-alt[0])
-	} else {
-		h0 = rise.Stdh0Solar
-	}
-	return rise.Times(pos, ΔT, h0, Th0, α, δ) //TODO : improve error handling, notably when error is 'Circumpolar'
+	Th0 := sidereal.Apparent0UT(sun.JD())
+	ΔT := deltat.PolyAfter2000(float64(julian.JDToTime(sun.JD()).Year()))
+	h0 := unit.AngleFromMin(alt)
+	return rise.Times(*sun.observer.Position, ΔT, h0, Th0, α, δ) //TODO : improve error handling, notably when error is 'Circumpolar'
 }
 
-// a helper to call two methods at a time
-// jd must be set before
-func (sun *SunBody) SetPositions(t time.Time) {
-	if sun.Date == 0 {
-		return
-	}
-	sun.ec = sun.ComputeEclPos(t)
-	sun.eq = sun.ComputeEquaPos()
+// CelestialBody interface
+func (sun *SunBody) JD() float64 {
+	return (*sun).observer.JulianDate
 }
 
 func (sun *SunBody) EclipticPosition() EclipticPosition {
@@ -111,10 +107,8 @@ func (sun *SunBody) EquatorialPosition() EquatorialPosition {
 	return (*sun).eq
 }
 
-// compute data for given day
-// and set sun's properties with results of these computations.
-func (sun *SunBody) SetDay(t time.Time) {
-	sun.ComputeEclPos(t)
+func (sun *SunBody) ApparentPosition() ApparentPosition {
+	return (*sun).ap
 }
 
 // returns solar hour angle at sunrise

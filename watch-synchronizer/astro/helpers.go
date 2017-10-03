@@ -40,10 +40,10 @@ func TimeFromDay(d float64, t ...time.Time) time.Time {
 
 func EclToEqu(cb CelestialBody) (α unit.RA, δ unit.Angle) {
 	ecl := cb.EclipticPosition()
-	Δψ, Δε := nutation.Nutation(ecl.jd)
+	Δψ, Δε := nutation.Nutation(cb.JD())
 	a := unit.AngleFromSec(-20.4898).Div(ecl.distance)
 	λ := ecl.long + Δψ + a
-	ε := nutation.MeanObliquityLaskar(ecl.jd) + Δε
+	ε := nutation.MeanObliquityLaskar(cb.JD()) + Δε
 	sε, cε := ε.Sincos()
 	return coord.EclToEq(λ, ecl.lat, sε, cε)
 }

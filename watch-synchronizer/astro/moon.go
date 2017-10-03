@@ -1,13 +1,7 @@
 package astro
 
 import (
-	"github.com/soniakeys/meeus/deltat"
-	"github.com/soniakeys/meeus/globe"
 	"github.com/soniakeys/meeus/julian"
-	"github.com/soniakeys/meeus/moonposition"
-	"github.com/soniakeys/meeus/rise"
-	"github.com/soniakeys/meeus/sidereal"
-	"github.com/soniakeys/unit"
 	"time"
 )
 
@@ -32,7 +26,7 @@ func NewMoon(t time.Time) *MoonBody {
 		Events: [3]TransitEvent{},
 	}
 }
-
+/*
 func (moon MoonBody) ComputeEclPos(t time.Time) EclipticPosition {
 	jde := julian.TimeToJD(t)
 	long, lat, dist := moonposition.Position(jde)
@@ -100,3 +94,5 @@ func (moon *MoonBody) SetPositions(t time.Time) {
 	moon.ec = moon.ComputeEclPos(t)
 	moon.eq = moon.ComputeEquaPos()
 }
+
+*/

@@ -1,8 +1,6 @@
 package astro
 
 import (
-	"github.com/soniakeys/meeus/globe"
-	pp "github.com/soniakeys/meeus/planetposition"
 	"github.com/soniakeys/unit"
 )
 
@@ -13,31 +11,33 @@ const (
 	Yesterday = iota - 1
 	Today
 	Tomorrow
+	SecInDay    = 86400.0
+	MinInDay    = 1440.0
+	SunCivilAlt = -350 // min of angle to compute civil sunrise/set
+	SunStdAlt   = -50  // min of angle to compute sunrise/set
 )
-
-/*
-TODO : refactor these var affectations
-*/
-var Position *globe.Coord
-var Sun *SunBody
-var Moon *MoonBody
-var Earth *pp.V87Planet
 
 type EclipticPosition struct {
 	long, lat unit.Angle
 	distance  float64 // distance between centers of the Earth and body, in AU
-	jd        float64 // julian date at which computation has been done
 }
 
 type EquatorialPosition struct {
 	RA  unit.RA
 	Dec unit.Angle
-	jd  float64 // julian date at which computation has been done
+}
+
+//	Az: azimuth of observed point, measured westward from the South.
+//	Elev: elevation, or height of observed point above horizon.
+type ApparentPosition struct {
+	Az, Elev float64
 }
 
 type CelestialBody interface {
 	EclipticPosition() EclipticPosition
 	EquatorialPosition() EquatorialPosition
+	ApparentPosition() ApparentPosition
+	JD() float64 //returns julian date at which celestial body has been set
 }
 
 type TransitEvent struct {
