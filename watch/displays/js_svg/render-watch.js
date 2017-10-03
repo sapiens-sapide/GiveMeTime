@@ -73,10 +73,10 @@ setInterval(() => {
 function secondRendering() {
     //today.now = new Date("2017-06-24T03:34:20");
     today.now = new Date();
-    if (seconds > 59) {
+    if ((today.now.getSeconds() - seconds > 1) || (hour !== today.now.getHours()) || (min !== today.now.getMinutes())) {
         minuteRendering();
     } else {
-        seconds++
+        seconds = today.now.getSeconds()
     }
     const minAngle = ((secInHour + seconds) / 3600) * 360;
     const hourAngle = ((secInDay + seconds) / 86400) * 360;
