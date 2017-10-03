@@ -3,19 +3,15 @@ package cmds
 import (
 	"encoding/json"
 	"github.com/sapiens-sapide/GiveMeTime/watch-synchronizer/ephemeris"
-	"github.com/soniakeys/meeus/globe"
-	"github.com/soniakeys/unit"
 	"log"
 	"net/http"
-	"time"
 	"strconv"
+	"time"
 )
 
 func StartEphemerisServer() {
-
 	http.HandleFunc("/ephemeris", returnEphemeris)
 	log.Fatal(http.ListenAndServe(":1971", nil))
-
 }
 
 // returns computed ephemeris for given date & position
@@ -36,7 +32,7 @@ func returnEphemeris(w http.ResponseWriter, req *http.Request) {
 	} else {
 		lat, err = strconv.ParseFloat(lt[0], 32)
 		if err != nil {
-			http.Error(w, "unable to parse latitude : " + err.Error(), http.StatusBadRequest)
+			http.Error(w, "unable to parse latitude : "+err.Error(), http.StatusBadRequest)
 		}
 	}
 
@@ -46,7 +42,7 @@ func returnEphemeris(w http.ResponseWriter, req *http.Request) {
 	} else {
 		lon, err = strconv.ParseFloat(ln[0], 32)
 		if err != nil {
-			http.Error(w, "unable to parse longitude : " + err.Error(), http.StatusBadRequest)
+			http.Error(w, "unable to parse longitude : "+err.Error(), http.StatusBadRequest)
 		}
 	}
 
@@ -56,15 +52,12 @@ func returnEphemeris(w http.ResponseWriter, req *http.Request) {
 	} else {
 		date, err = time.Parse(time.RFC3339, d[0])
 		if err != nil {
-			http.Error(w, "unable to parse date string : " + err.Error(), http.StatusBadRequest)
+			http.Error(w, "unable to parse date string : "+err.Error(), http.StatusBadRequest)
 			return
 		}
 	}
 
-	eph, err := ephemeris.EphemerisForDay(date, globe.Coord{
-		Lat: unit.AngleFromDeg(lat),
-		Lon: unit.AngleFromDeg(lon), //positive westward
-	})
+	eph, err := ephemeris.EphemerisForDay(date, lat, lon)
 	if err != nil {
 		log.Println(err)
 	}

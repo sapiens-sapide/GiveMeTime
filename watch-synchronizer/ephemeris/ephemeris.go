@@ -4,10 +4,6 @@ package ephemeris
 import (
 	"fmt"
 	"github.com/sapiens-sapide/GiveMeTime/watch-synchronizer/astro"
-	"github.com/soniakeys/meeus/globe"
-	"github.com/soniakeys/meeus/julian"
-	pp "github.com/soniakeys/meeus/planetposition"
-	"os"
 	"time"
 )
 
@@ -21,45 +17,57 @@ type DayEphemeris struct {
 }
 
 // sun ephemeris for one day
-// all times are given in minutes, starting at midnight
+// all times are given in seconds, starting at midnight
 type SunEphemeris struct {
-	Rise      float32
+	Rise      uint32
 	RiseAz    float32 // in degrees
-	CivilRise float32
-	Set       float32
+	CivilRise uint32
+	Set       uint32
 	SetAz     float32 // in degrees
-	CivilSet  float32
-	Zenith    float32 // noon time
+	CivilSet  uint32
+	Zenith    uint32 // noon time
 }
 
 // moon ephemeris for one day
 type MoonEphemeris struct {
 }
 
-func EphemerisForDay(day time.Time, pos globe.Coord) (eph DayEphemeris, err error) {
-	os.Setenv("VSOP87", "/usr/local/goland/src/github.com/sapiens-sapide/GiveMeTime/watch-synchronizer/astro")
-	astro.Earth, err = pp.LoadPlanet(pp.Earth)
-	if err != nil {
-		fmt.Println(err)
+func EphemerisForDay(t time.Time, lat, lon float64) (eph DayEphemeris, err error) {
+	eph.Date = time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, t.Location())
+	o := astro.NewObserver(eph.Date, lat, lon)
+	if o == nil {
+		fmt.Println("Error when creating observer")
 		return
 	}
-	astro.Position = &pos
-	// sun computations
-	astro.Sun = astro.NewSun(day)
-	astro.Sun.SetPositions(julian.JDToTime(astro.Sun.Date).Add(3 * time.Hour)) // compute position at 3 o'clock in the morning to be closer to rise/transit/set events ?
-
-	utcRise, utcTransit, utcSet, err := astro.Sun.ComputeTransit(*astro.Position)
+	sun := astro.NewSun(o)
+	rise, transit, set, err := sun.ComputeTransit(astro.SunStdAlt)
 	if err != nil {
 		fmt.Printf("Error when computing sun's transit data : %s\n", err)
 		return
 	}
-	utcRiseCiv, _, utcSetCiv, err := astro.Sun.ComputeTransit(*astro.Position, 350)
-	_, tz := day.Zone()
-	eph.Date = day
-	eph.Sun.Rise = float32(utcRise.Sec()+float64(tz)) / 60.0
-	eph.Sun.Zenith = float32(utcTransit.Sec()+float64(tz)) / 60.0
-	eph.Sun.Set = float32(utcSet.Sec()+float64(tz)) / 60.0
-	eph.Sun.CivilRise = float32(utcRiseCiv.Sec()+float64(tz)) / 60.0
-	eph.Sun.CivilSet = float32(utcSetCiv.Sec()+float64(tz)) / 60.0
+	eph.Sun.Rise = uint32(rise)
+	eph.Sun.Zenith = uint32(transit)
+	eph.Sun.Set = uint32(set)
+
+	// compute apparent sun at sunrise time
+	o_rise := astro.NewObserver(eph.Date.Add(time.Duration(uint64(rise))*time.Second), 48.860833, -2.366944)
+	sun_rise := astro.NewSun(o_rise)
+	apparent_rise := sun_rise.ApparentPosition()
+	eph.Sun.RiseAz = float32(apparent_rise.Az)
+
+	// compute apparent sun at sunset time
+	o_set := astro.NewObserver(eph.Date.Add(time.Duration(uint64(set))*time.Second), 48.860833, -2.366944)
+	sun_set := astro.NewSun(o_set)
+	apparent_set := sun_set.ApparentPosition()
+	eph.Sun.SetAz = float32(apparent_set.Az)
+
+	rise, _, set, err = sun.ComputeTransit(astro.SunCivilAlt)
+	if err != nil {
+		fmt.Printf("Error when computing sun's transit data : %s\n", err)
+		return
+	}
+	eph.Sun.CivilRise = uint32(rise)
+	eph.Sun.CivilSet = uint32(set)
+
 	return
 }
