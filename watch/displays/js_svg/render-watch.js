@@ -18,7 +18,11 @@ const wc = getWatchCase();
 const mc = getMarkersCircle();
 /** sun components **/
 const cc = getCompassCircle();
-const ste = getSunTimesElems();
+const sc = getSunCircle();
+let sre = getSunRiseElems(0, "");
+let sse = getSunSetElems(0, "");
+let sne = getSunNoonElems("");
+
 /** buttons components **/
 const b1 = getButton1();
 const b2 = getButton2();
@@ -67,7 +71,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //today.now = new Date("2017-10-01T03:34:20");
+    //today.now = new Date("2017-06-24T03:34:20");
     today.now = new Date();
     if (seconds > 59) {
         minuteRendering();
@@ -105,8 +109,21 @@ function dayRendering(position) {
 function updateSunData(syncSucceeded) {
     if (syncSucceeded) {
         ephemDaysLeft = 0; // TODO: manage local storage when more days will be provided by sync service
-        ste[1].innerHTML = `${Math.floor(sun.rise / 60)}:${Math.floor(sun.rise % 60)} - ${Math.floor(sun.set / 60)}:${Math.floor(sun.set % 60)}`;
-        const noonAngle = (sun.zenith / 1440) * 360;
+        //ste[1].innerHTML = `${Math.floor(sun.rise / 3600)}:${Math.floor(sun.rise % 3600 / 60)} - ${Math.floor(sun.set / 3600)}:${Math.floor(sun.set % 3600 / 60)}`;
+        if (sunOn) {
+            svgEl.removeChild(sre);
+            svgEl.removeChild(sse);
+            svgEl.removeChild(sne);
+        }
+        sre = getSunRiseElems(sun.riseAz, `● ${Math.floor(sun.rise / 3600)}:${Math.floor(sun.rise % 3600 / 60)} α ${Math.floor(sun.riseAz)}°`);
+        sse = getSunSetElems(sun.setAz, `${Math.floor(sun.set / 3600)}:${Math.floor(sun.set % 3600 / 60)} α ${Math.floor(sun.setAz)}° ●`);
+        sne = getSunNoonElems(`${Math.floor(sun.zenith / 3600)}:${Math.floor(sun.zenith % 3600 / 60)}`);
+        if (sunOn) {
+            svgEl.appendChild(sre);
+            svgEl.appendChild(sse);
+            svgEl.appendChild(sne);
+        }
+        const noonAngle = (sun.zenith / 86400) * 360;
         nm.setAttribute("transform", `rotate(${noonAngle})`);
         if (timeOn) {
             svgEl.removeChild(civilNightLength);

@@ -26,9 +26,11 @@ function getEphemeris(date, position, callback) {
                 resp = JSON.parse(this.response);
                 sun.rise = resp.Sun.Rise;
                 sun.civilRise = resp.Sun.CivilRise;
+                sun.riseAz = resp.Sun.RiseAz;
                 sun.zenith = resp.Sun.Zenith;
                 sun.set = resp.Sun.Set;
                 sun.civilSet = resp.Sun.CivilSet;
+                sun.setAz = resp.Sun.SetAz;
                 callback(true);
             } else {
                 sun.rise = 0;
@@ -42,6 +44,7 @@ function getEphemeris(date, position, callback) {
     };
     const host = document.location.hostname;
     const enc_date = encodeURIComponent(toRFC3339string(date));
+    //xhttp.open("GET", `http://localhost:1971/ephemeris?lat=${position.lat}&lon=${position.lon}&date=${enc_date}`, true);
     xhttp.open("GET", `https://gmt.sapienssapide.com/ephemeris?lat=${position.lat}&lon=${position.lon}&date=${enc_date}`, true);
     xhttp.send();
 }

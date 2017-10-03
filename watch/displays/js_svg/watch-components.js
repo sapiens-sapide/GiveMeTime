@@ -102,9 +102,9 @@ function getArc(percent, strokeWidth, rad) {
 // returns an svg arc representing the night length
 // sunrise and sunset are in minutes from midnight.
 function getNightArc(sunrise, sunset) {
-    const nightLength = 1440 - (sunset - sunrise);
-    const nightArc = getArc(nightLength / 1440, 15 * dot, radius);
-    const sunsetAngle = (sunset / 1440) * 360;
+    const nightLength = 86400 - (sunset - sunrise);
+    const nightArc = getArc(nightLength / 86400, 15 * dot, radius);
+    const sunsetAngle = (sunset / 86400) * 360;
     nightArc.setAttribute("transform", `rotate(${sunsetAngle})`);
     return nightArc;
 }
