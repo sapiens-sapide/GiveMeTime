@@ -30,11 +30,7 @@ const b2 = getButton2();
 let ephemDaysLeft = -1; // how many days ahead are in local storage. -1 means no data for current day.
 
 svgEl.appendChild(wc);
-svgEl.appendChild(civilNightLength);
-svgEl.appendChild(nightLength);
 timeDisplayOn();
-svgEl.appendChild(mc);
-svgEl.appendChild(nm);
 
 /** buttons **/
 const svgButton = document.querySelector("#watchbuttons");
@@ -54,9 +50,9 @@ b1.addEventListener("click", function () {
 let today = {
     d: 0
 };
-today.d = 0;
-let hour = 0;
-let min = 0;
+today.d = -1;
+let hour = -1;
+let min = -1;
 let seconds = 60;
 let secInHour = 0;
 let secInDay = 0;
@@ -71,7 +67,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //today.now = new Date("2017-06-24T03:34:20");
+    //today.now = new Date("2017-06-24T12:31:20");
     today.now = new Date();
     if ((today.now.getSeconds() - seconds > 1) || (hour !== today.now.getHours()) || (min !== today.now.getMinutes())) {
         minuteRendering();
@@ -107,37 +103,23 @@ function dayRendering(position) {
 }
 
 function updateSunData(syncSucceeded) {
+    if (sunOn) {
+        sunDisplayOff();
+    }
+    if (timeOn) {
+        timeDisplayOff();
+    }
     if (syncSucceeded) {
-        ephemDaysLeft = 0; // TODO: manage local storage when more days will be provided by sync service
-        //ste[1].innerHTML = `${Math.floor(sun.rise / 3600)}:${Math.floor(sun.rise % 3600 / 60)} - ${Math.floor(sun.set / 3600)}:${Math.floor(sun.set % 3600 / 60)}`;
-        if (sunOn) {
-            svgEl.removeChild(sre);
-            svgEl.removeChild(sse);
-            svgEl.removeChild(sne);
-        }
         sre = getSunRiseElems(sun.riseAz, `● ${Math.floor(sun.rise / 3600)}:${Math.floor(sun.rise % 3600 / 60)} α ${Math.floor(sun.riseAz)}°`);
         sse = getSunSetElems(sun.setAz, `${Math.floor(sun.set / 3600)}:${Math.floor(sun.set % 3600 / 60)} α ${Math.floor(sun.setAz)}° ●`);
         sne = getSunNoonElems(`${Math.floor(sun.zenith / 3600)}:${Math.floor(sun.zenith % 3600 / 60)}`);
-        if (sunOn) {
-            svgEl.appendChild(sre);
-            svgEl.appendChild(sse);
-            svgEl.appendChild(sne);
-        }
         const noonAngle = (sun.zenith / 86400) * 360;
         nm.setAttribute("transform", `rotate(${noonAngle})`);
-        if (timeOn) {
-            svgEl.removeChild(civilNightLength);
-            svgEl.removeChild(nightLength);
-        }
         civilNightLength = getNightArc(sun.civilRise, sun.civilSet);
         nightLength = getNightArc(sun.rise, sun.set);
-        if (timeOn) {
-            svgEl.appendChild(civilNightLength);
-            svgEl.appendChild(nightLength);
-        }
+        ephemDaysLeft = 0; // TODO: manage local storage when more days will be provided by sync service
     } else {
         ephemDaysLeft = -1;
-        ste[1].innerHTML = "";
-        svgEl.removeChild(nm);
     }
+    timeDisplayOn()
 }

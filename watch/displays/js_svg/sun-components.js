@@ -7,6 +7,7 @@ function sunDisplayOn() {
     svgEl.appendChild(sse);
     svgEl.appendChild(sne);
     svgEl.appendChild(sc);
+    svgEl.appendChild(mc);
     sunOn = true;
 }
 
@@ -16,6 +17,7 @@ function sunDisplayOff() {
     svgEl.removeChild(sse);
     svgEl.removeChild(sne);
     svgEl.removeChild(sc);
+    svgEl.removeChild(mc);
     sunOn = false;
 }
 

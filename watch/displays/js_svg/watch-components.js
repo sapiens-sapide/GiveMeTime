@@ -33,13 +33,13 @@ function getWatchCase() {
 }
 
 function timeDisplayOn() {
-    svgEl.appendChild(civilNightLength);
-    svgEl.appendChild(nightLength);
     svgEl.appendChild(hh);
     svgEl.appendChild(mh);
     svgEl.appendChild(secElems);
     svgEl.appendChild(tc);
     if (ephemDaysLeft !== -1) {
+        svgEl.appendChild(civilNightLength);
+        svgEl.appendChild(nightLength);
         svgEl.appendChild(nm);
     }
 //svgEl.appendChild(getOuterRect());
@@ -49,17 +49,18 @@ function timeDisplayOn() {
     svgEl.appendChild(dc[0]); // date background
     svgEl.appendChild(dc[1]); // date container
     svgEl.appendChild(hc);
+    svgEl.appendChild(mc);
     timeOn = true;
 }
 
 function timeDisplayOff() {
-    svgEl.removeChild(civilNightLength);
-    svgEl.removeChild(nightLength);
     svgEl.removeChild(hh);
     svgEl.removeChild(mh);
     svgEl.removeChild(secElems);
     svgEl.removeChild(tc);
     if (ephemDaysLeft !== -1) {
+        svgEl.removeChild(civilNightLength);
+        svgEl.removeChild(nightLength);
         svgEl.removeChild(nm);
     }
 //svgEl.removeChild(getOuterRect());
@@ -69,6 +70,7 @@ function timeDisplayOff() {
     svgEl.removeChild(dc[0]); // date background
     svgEl.removeChild(dc[1]); // date container
     svgEl.removeChild(hc);
+    svgEl.removeChild(mc);
     timeOn = false;
 }
 
@@ -276,17 +278,27 @@ function getSecElems() {
 
 function getMinutesHandle() {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    //rounded rectangle
     const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
     const thickness = dot * 3;
     setAttributes(r, {
         x: 0,
         y: -thickness / 2,
-        width: radius - dot * 1,
+        width: radius - dot * 16,
         height: thickness,
         stroke: darkcolor,
         "stroke-width": dot * 1,
         fill: "none",
     });
+    // arrow
+    const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const y = 0.08 * radius;
+    const x2 = 0.27 * radius;
+    setAttributes(a, {
+        d: `m${0.724 * radius} ${y} l${x2} -${y} l-${x2} -${y} z`,
+        fill: bluecolor
+    });
+
     const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
     setAttributes(l, {
         y1: 0,
@@ -297,8 +309,9 @@ function getMinutesHandle() {
         "stroke-width": dot * 8,
         "stroke-linecap": "round"
     });
+    //g.appendChild(r);
     g.appendChild(r);
-    g.appendChild(l);
+    g.appendChild(a);
     return g;
 }
 
@@ -306,7 +319,7 @@ function getHourHandle() {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "line");
     setAttributes(g, {
         x1: 0,
-        y1: -7.4 * unitbase,
+        y1: -7.39 * unitbase,
         x2: 0,
         y2: -radius * 0.97,
         stroke: redcolor,
