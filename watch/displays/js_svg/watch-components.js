@@ -34,14 +34,14 @@ function getWatchCase() {
 
 function timeDisplayOn() {
     svgEl.appendChild(hh);
-    svgEl.appendChild(mh);
-    svgEl.appendChild(secElems);
     svgEl.appendChild(tc);
     if (ephemDaysLeft !== -1) {
         svgEl.appendChild(civilNightLength);
         svgEl.appendChild(nightLength);
         svgEl.appendChild(nm);
     }
+    svgEl.appendChild(mh);
+    svgEl.appendChild(secElems);
 //svgEl.appendChild(getOuterRect());
 //svgEl.appendChild(getCrossLines());
     svgEl.appendChild(wdc[0]); // weekday background
