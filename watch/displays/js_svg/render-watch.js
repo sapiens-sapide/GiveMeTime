@@ -110,8 +110,10 @@ function updateSunData(syncSucceeded) {
         timeDisplayOff();
     }
     if (syncSucceeded) {
-        sre = getSunRiseElems(sun.riseAz, `● ${Math.floor(sun.rise / 3600)}:${Math.floor(sun.rise % 3600 / 60)} α ${Math.floor(sun.riseAz)}°`);
-        sse = getSunSetElems(sun.setAz, `${Math.floor(sun.set / 3600)}:${Math.floor(sun.set % 3600 / 60)} α ${Math.floor(sun.setAz)}° ●`);
+        const rise_minutes = Math.floor(sun.rise % 3600 / 60);
+        sre = getSunRiseElems(sun.riseAz, `● ${Math.floor(sun.rise / 3600)}:${rise_minutes < 10 ? "0" + rise_minutes : rise_minutes} α ${Math.floor(sun.riseAz)}°`);
+        const set_minutes = Math.floor(sun.set % 3600 / 60);
+        sse = getSunSetElems(sun.setAz, `${Math.floor(sun.set / 3600)}:${set_minutes < 10 ? "0" + set_minutes : set_minutes} α ${Math.floor(sun.setAz)}° ●`);
         sne = getSunNoonElems(`${Math.floor(sun.zenith / 3600)}:${Math.floor(sun.zenith % 3600 / 60)}`);
         const noonAngle = (sun.zenith / 86400) * 360;
         nm.setAttribute("transform", `rotate(${noonAngle})`);
