@@ -37,7 +37,6 @@ function timeDisplayOn() {
     if (ephemDaysLeft !== -1) {
         svgEl.appendChild(civilNightLength);
         svgEl.appendChild(nightLength);
-        svgEl.appendChild(nm);
     }
     svgEl.appendChild(mh);
     svgEl.appendChild(secElems);
@@ -48,6 +47,9 @@ function timeDisplayOn() {
     svgEl.appendChild(wdc[1]); // weekday container
     svgEl.appendChild(dc[0]); // date background
     svgEl.appendChild(dc[1]); // date container
+    if (ephemDaysLeft !== -1) {
+        svgEl.appendChild(nm);
+    }
     svgEl.appendChild(hc);
     svgEl.appendChild(mc);
     timeOn = true;
