@@ -172,7 +172,7 @@ function getHoursCircle() {
             x: coord2[0],
             y: coord2[1],
             "font-size": unitbase * 0.4,
-            fill: redcolor,
+            fill: greycolor,
             style: `text-anchor: middle;font-family: ${smallFontFamily}`,
             transform: "translate(0, -0.008)"
         });
@@ -204,8 +204,8 @@ function getMarkersCircle() {
             y: -h / 2,
             width: w,
             height: h,
-            fill: darkcolor,
-            stroke: darkcolor,
+            fill: bluecolor,
+            stroke: bluecolor,
             "stroke-width": dot
         });
         g.appendChild(r);
