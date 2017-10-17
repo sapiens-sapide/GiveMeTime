@@ -67,7 +67,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //today.now = new Date("2017-06-24T13:33:50");
+    //today.now = new Date("2017-10-15T18:57:00");
     today.now = new Date();
     if ((today.now.getSeconds() - seconds > 1) || (hour !== today.now.getHours()) || (min !== today.now.getMinutes())) {
         minuteRendering();
@@ -77,7 +77,7 @@ function secondRendering() {
     const minAngle = ((secInHour + seconds) / 3600) * 360;
     const hourAngle = ((secInDay + seconds) / 86400) * 360;
     mh.setAttribute("transform", `rotate(${minAngle - 90})`);
-    hh.setAttribute("transform", `rotate(${hourAngle})`);
+    hh.setAttribute("transform", `rotate(${hourAngle - 90})`);
 }
 
 function minuteRendering() {
@@ -114,7 +114,8 @@ function updateSunData(syncSucceeded) {
         sre = getSunRiseElems(sun.riseAz, `● ${Math.floor(sun.rise / 3600)}:${rise_minutes < 10 ? "0" + rise_minutes : rise_minutes} α ${Math.floor(sun.riseAz)}°`);
         const set_minutes = Math.floor(sun.set % 3600 / 60);
         sse = getSunSetElems(sun.setAz, `${Math.floor(sun.set / 3600)}:${set_minutes < 10 ? "0" + set_minutes : set_minutes} α ${Math.floor(sun.setAz)}° ●`);
-        sne = getSunNoonElems(`${Math.floor(sun.zenith / 3600)}:${Math.floor(sun.zenith % 3600 / 60)}`);
+        const noon_minutes = Math.floor(Math.floor(sun.zenith % 3600 / 60));
+        sne = getSunNoonElems(`${Math.floor(sun.zenith / 3600)}:${noon_minutes < 10 ? "0" + noon_minutes : noon_minutes}`);
         const noonAngle = (sun.zenith / 86400) * 360;
         nm.setAttribute("transform", `rotate(${noonAngle})`);
         civilNightLength = getNightArc(sun.civilRise, sun.civilSet);

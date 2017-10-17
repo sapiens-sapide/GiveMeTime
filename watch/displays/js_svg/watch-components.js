@@ -152,32 +152,32 @@ function getHoursCircle() {
         txtG.appendChild(txt);
         hg.appendChild(txtG);
     }
-    for (let i = 1; i < 25; i++) {
+    for (let i = 0; i < 24; i++) {
         // hours
         const txtG2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        const background2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        //const background2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         const ang2 = 15 * i;
         const coord2 = coordinatesForPercent(ang2 / 360, 15 * dot);
-        setAttributes(background2, {
+        /*setAttributes(background2, {
             cx: coord2[0],
             cy: coord2[1],
             r: unitbase * 0.35,
             fill: "#FFFFFF",
             "fill-opacity": 0.7,
             transform: "translate(0, -0.022)"
-        });
+        });*/
         const txt2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
         setAttributes(txt2, {
             "class": "hoursNum",
             x: coord2[0],
             y: coord2[1],
             "font-size": unitbase * 0.4,
-            fill: greycolor,
+            fill: "#000000",
             style: `text-anchor: middle;font-family: ${smallFontFamily}`,
             transform: "translate(0, -0.008)"
         });
         txt2.innerHTML = i;
-        txtG2.appendChild(background2);
+        //txtG2.appendChild(background2);
         txtG2.appendChild(txt2);
         hg.appendChild(txtG2);
     }
@@ -189,23 +189,57 @@ function getHoursCircle() {
 // there are 12 main markers + 12 small markers.
 function getMarkersCircle() {
     const mg = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    for (let i = 0; i < 24; i += 2) {
+    for (let i = 0; i < 24; i++) {
+
+        // minutes markers
+        if (i % 2 === 0) {
+            const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            const ang = (15 * i) - 90;
+            setAttributes(g, {
+                transform: `rotate(${ang})`
+            });
+            const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            let w, h, x, color;
+            if (i % 6 === 0) {
+                w = dot * 13;
+                h = dot * 3;
+                x = radius - 0.175;
+                color = "#000000"
+            } else {
+                w = dot * 10;
+                h = dot;
+                x = radius - 0.16;
+                color = bluecolor
+            }
+            setAttributes(r, {
+                x: x,
+                y: -h / 2,
+                width: w,
+                height: h,
+                fill: color,
+                stroke: color,
+                "stroke-width": dot
+            });
+            g.appendChild(r);
+            mg.appendChild(g);
+        }
+        // hours markers
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
         const ang = (15 * i) - 60;
         setAttributes(g, {
             transform: `rotate(${ang})`
         });
         const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        const w = dot * 12;
-        const h = dot * 3;
-        const x = radius - ( 2.3 * w);
+        const w = dot * 2;
+        const h = dot * 1;
+        const x = radius - ( dot * 2);
         setAttributes(r, {
             x: x,
             y: -h / 2,
             width: w,
             height: h,
-            fill: bluecolor,
-            stroke: bluecolor,
+            fill: greycolor,
+            stroke: greycolor,
             "stroke-width": dot
         });
         g.appendChild(r);
@@ -351,26 +385,36 @@ function getMinutesHandle() {
 }
 
 function getHourHandle() {
-    const g = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    setAttributes(g, {
-        x1: 0,
-        y1: -7.39 * unitbase,
-        x2: 0,
-        y2: -radius * 0.97,
+    const hg = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    setAttributes(l, {
+        x1: 8.7 * unitbase,
+        y1: 0,
+        x2: radius * 0.97,
+        y2: 0,
         stroke: redcolor,
-        "stroke-width": dot * 8,
+        "stroke-width": dot * 2,
         "stroke-linecap": "round"
     });
-    return g;
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    setAttributes(c, {
+        cx: radius - unitbase * 0.5,
+        cy: 0,
+        r: unitbase * 0.45,
+        fill: redcolor,
+    });
+    hg.appendChild(l);
+    hg.appendChild(c);
+    return hg;
 }
 
 function getNoonMark() {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "line");
     setAttributes(g, {
         x1: 0,
-        y1: -0.70,
+        y1: -0.82,
         x2: 0,
-        y2: -0.89,
+        y2: -0.995,
         stroke: greycolor,
         "stroke-width": dot * 2
     });
