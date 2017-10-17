@@ -206,9 +206,9 @@ function getMarkersCircle() {
                 x = radius - 0.175;
                 color = "#000000"
             } else {
-                w = dot * 10;
-                h = dot;
-                x = radius - 0.16;
+                w = dot * 4;
+                h = dot * 4;
+                x = radius - 0.15;
                 color = bluecolor
             }
             setAttributes(r, {
@@ -218,7 +218,7 @@ function getMarkersCircle() {
                 height: h,
                 fill: color,
                 stroke: color,
-                "stroke-width": dot
+                "stroke-width": dot,
             });
             g.appendChild(r);
             mg.appendChild(g);
