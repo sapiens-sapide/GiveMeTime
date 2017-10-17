@@ -2,12 +2,12 @@
 // every other hour is written down as a number
 
 function sunDisplayOn() {
-    svgEl.appendChild(cc);
+    svgEl.appendChild(mc);
     svgEl.appendChild(sre);
     svgEl.appendChild(sse);
     svgEl.appendChild(sne);
     svgEl.appendChild(sc);
-    svgEl.appendChild(mc);
+    svgEl.appendChild(cc);
     sunOn = true;
 }
 
@@ -36,13 +36,13 @@ function getCompassCircle() {
         const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
         const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         const ang = 30 * i;
-        const coord = coordinatesForPercent(ang / 360, 48 * dot);
+        const coord = coordinatesForPercent(ang / 360, dot);
         setAttributes(background, {
             cx: coord[0] * 0.95,
             cy: coord[1] * 0.95,
-            r: unitbase * 0.35,
+            r: unitbase * 0.48,
             fill: "#FFFFFF",
-            transform: "translate(0, -0.022)"
+            transform: "translate(0, -0.03)"
         });
         const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
 
