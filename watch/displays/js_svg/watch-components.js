@@ -162,6 +162,7 @@ function getHoursCircle() {
             cy: coord2[1],
             r: unitbase * 0.35,
             fill: "#FFFFFF",
+            "fill-opacity": 0.7,
             transform: "translate(0, -0.022)"
         });
         const txt2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -199,7 +200,7 @@ function getMarkersCircle() {
             transform: `rotate(${ang})`
         });
         const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        const w = dot * (i % 2 === 0 ? 2 : 15);
+        const w = dot * (i % 2 === 0 ? 1 : 15);
         const h= dot * (i % 2 === 0 ? 1 : 2);
         const x = radius - w;
         setAttributes(r, {
