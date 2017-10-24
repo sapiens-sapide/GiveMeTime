@@ -135,9 +135,9 @@ function getHoursCircle() {
             setAttributes(background, {
                 cx: coord[0],
                 cy: coord[1],
-                r: unitbase * 0.47,
+                r: unitbase * 0.55,
                 fill: bluecolor,
-                stroke: darkcolor,
+                stroke: "#FFFFFF",
                 "stroke-width": dot,
                 transform: "translate(0, -0.022)"
             });
