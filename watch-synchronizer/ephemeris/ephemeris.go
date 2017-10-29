@@ -30,6 +30,7 @@ type SunEphemeris struct {
 
 // moon ephemeris for one day
 type MoonEphemeris struct {
+	IsMoonEvent uint8
 }
 
 func EphemerisForDay(t time.Time, lat, lon float64) (eph DayEphemeris, err error) {
@@ -40,6 +41,7 @@ func EphemerisForDay(t time.Time, lat, lon float64) (eph DayEphemeris, err error
 		fmt.Println("Error when creating observer")
 		return
 	}
+	eph.Moon.IsMoonEvent = astro.IsMoonEvent(*o)
 	sun := astro.NewSun(o)
 	rise, transit, set, err := sun.ComputeTransit(astro.SunStdAlt)
 	if err != nil {

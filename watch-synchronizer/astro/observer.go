@@ -6,11 +6,12 @@ import (
 	"github.com/soniakeys/meeus/julian"
 	pp "github.com/soniakeys/meeus/planetposition"
 	"github.com/soniakeys/unit"
-	"time"
 	"os"
+	"time"
 )
 
 type Observer struct {
+	Date       time.Time
 	JulianDate float64
 	Position   *globe.Coord
 	earth      *pp.V87Planet
@@ -33,6 +34,7 @@ func NewObserver(date time.Time, lat, lon float64) *Observer {
 		return nil
 	}
 	return &Observer{
+		Date:       date,
 		JulianDate: julian.TimeToJD(date),
 		Position: &globe.Coord{
 			Lat: unit.AngleFromDeg(lat),
