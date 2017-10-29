@@ -131,11 +131,11 @@ function getHoursCircle() {
             const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
             const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             const ang = 30 * i;
-            const coord = coordinatesForPercent(ang / 360, 50 * dot);
+            const coord = coordinatesForPercent(ang / 360, 52 * dot);
             setAttributes(background, {
                 cx: coord[0],
                 cy: coord[1],
-                r: unitbase * 0.55,
+                r: unitbase * 0.6,
                 fill: bluecolor,
                 stroke: "#FFFFFF",
                 "stroke-width": dot,
@@ -362,7 +362,7 @@ function getMinutesHandle() {
     });
     // arrow
     const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    const y = 0.05 * radius;
+    const y = 0.07 * radius;
     const x2 = 0.14 * radius;
     setAttributes(a, {
         d: `m${0.85 * radius} ${y} 
@@ -391,7 +391,7 @@ function getHourHandle() {
     const hg = document.createElementNS("http://www.w3.org/2000/svg", "g");
     const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
     setAttributes(l, {
-        x1: 8.7 * unitbase,
+        x1: 7.5 * unitbase,
         y1: 0,
         x2: radius * 0.97,
         y2: 0,

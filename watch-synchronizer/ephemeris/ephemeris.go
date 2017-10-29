@@ -33,6 +33,7 @@ type MoonEphemeris struct {
 }
 
 func EphemerisForDay(t time.Time, lat, lon float64) (eph DayEphemeris, err error) {
+	//reset current time to midnight
 	eph.Date = t.Add(-(time.Duration(t.Hour()) * time.Hour) - (time.Duration(t.Minute()) * time.Minute) - (time.Duration(t.Second()) * time.Second))
 	o := astro.NewObserver(eph.Date, lat, lon)
 	if o == nil {

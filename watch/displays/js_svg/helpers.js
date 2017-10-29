@@ -30,6 +30,7 @@ function gaugeParam(radius, percent) {
 // with timezone.
 // example output : 2006-01-02T15:04:05+02:00
 function toRFC3339string(date) {
+    //const tz = 0; // offset to add to local time to get UTC time in minutes (for ex., Paris' offset is -120 at DST)
     const tz = -date.getTimezoneOffset(); // offset to add to local time to get UTC time in minutes (for ex., Paris' offset is -120 at DST)
     const abs_offset = Math.abs(tz);
     const tz_h = Math.floor(abs_offset / 60) < 10 ? "0" + Math.floor(abs_offset / 60) : Math.floor(abs_offset / 60);

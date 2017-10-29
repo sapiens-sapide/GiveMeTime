@@ -56,7 +56,6 @@ func returnEphemeris(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 	}
-
 	eph, err := ephemeris.EphemerisForDay(date, lat, lon)
 	if err != nil {
 		log.Println(err)
