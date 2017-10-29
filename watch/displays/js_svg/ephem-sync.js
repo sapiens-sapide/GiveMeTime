@@ -14,6 +14,10 @@ const sun = {
     zenith: 0
 };
 
+const moon = {
+    isMoonEvent: 0
+};
+
 // date is a js date object
 // position is a simple obj with 2 properties :
 //  lat=latitude in decimal degrees (positive northward) (Paris = 48.860833)
@@ -31,6 +35,7 @@ function getEphemeris(date, position, callback) {
                 sun.set = resp.Sun.Set;
                 sun.civilSet = resp.Sun.CivilSet;
                 sun.setAz = resp.Sun.SetAz;
+                moon.isMoonEvent = resp.Moon.IsMoonEvent;
                 callback(true);
             } else {
                 sun.rise = 0;

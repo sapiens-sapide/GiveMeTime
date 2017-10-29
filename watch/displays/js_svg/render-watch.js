@@ -16,6 +16,8 @@ const dc = getDateContainer();
 const hc = getHoursCircle();
 const wc = getWatchCase();
 const mc = getMarkersCircle();
+let mooncomp = getMoon(0);
+
 /** sun components **/
 const cc = getCompassCircle();
 const sc = getSunCircle();
@@ -67,7 +69,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //today.now = new Date("2018-02-28T13:55:00");
+    //today.now = new Date("2017-11-19T00:30:00");
     today.now = new Date();
     if ((today.now.getSeconds() - seconds > 1) || (hour !== today.now.getHours()) || (min !== today.now.getMinutes())) {
         minuteRendering();
@@ -121,6 +123,7 @@ function updateSunData(syncSucceeded) {
         civilNightLength = getNightArc(sun.civilRise, sun.civilSet);
         nightLength = getNightArc(sun.rise, sun.set);
         ephemDaysLeft = 0; // TODO: manage local storage when more days will be provided by sync service
+        mooncomp = getMoon(moon.isMoonEvent)
     } else {
         ephemDaysLeft = -1;
     }

@@ -1,5 +1,5 @@
 /**
- Designed for a 320x320px circular screen.
+ Designed for a 320px (diam) circular screen.
  The viewbox is a 2unit x 2unit square, with origin (0,0) at center.
  Top left corner is at x=-1,y=-1.
  Within this referential, 1 unit = 160px.
@@ -37,6 +37,7 @@ function timeDisplayOn() {
     if (ephemDaysLeft !== -1) {
         svgEl.appendChild(civilNightLength);
         svgEl.appendChild(nightLength);
+        svgEl.appendChild(mooncomp);
     }
     svgEl.appendChild(mh);
     svgEl.appendChild(secElems);
@@ -64,6 +65,7 @@ function timeDisplayOff() {
         svgEl.removeChild(civilNightLength);
         svgEl.removeChild(nightLength);
         svgEl.removeChild(nm);
+        svgEl.removeChild(mooncomp);
     }
 //svgEl.removeChild(getOuterRect());
 //svgEl.removeChild(getCrossLines());
@@ -434,6 +436,22 @@ function getNoonMark() {
     return g;
 }
 
+function getMoon(isMoonEvent) {
+    if (isMoonEvent && isMoonEvent !== 0) {
+        const moon = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        const fill = isMoonEvent === 1 ? "transparent" : greycolor;
+        setAttributes(moon, {
+            cx: 0,
+            cy: 0.35,
+            r: secondsRadius * 1.3,
+            fill: fill,
+            stroke: "#000000",
+            "stroke-width": dot,
+        });
+        return moon;
+    }
+    return document.createElement("div");
+}
 /** below are temporary components to help design the clock **/
 function getOuterRect() {
     const recEl = document.createElementNS("http://www.w3.org/2000/svg", "rect");
