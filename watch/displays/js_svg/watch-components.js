@@ -109,7 +109,7 @@ function getArc(percent, strokeWidth, rad) {
 // sunrise and sunset are in minutes from midnight.
 function getNightArc(sunrise, sunset) {
     const nightLength = 86400 - (sunset - sunrise);
-    const nightArc = getArc(nightLength / 86400, 15 * dot, radius);
+    const nightArc = getArc(nightLength / 86400, 11 * dot, radius);
     const sunsetAngle = (sunset / 86400) * 360;
     nightArc.setAttribute("transform", `rotate(${sunsetAngle})`);
     return nightArc;
@@ -133,7 +133,7 @@ function getHoursCircle() {
             const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
             const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             const ang = 30 * i;
-            const coord = coordinatesForPercent(ang / 360, 52 * dot);
+            const coord = coordinatesForPercent(ang / 360, 55 * dot);
             setAttributes(background, {
                 cx: coord[0],
                 cy: coord[1],
