@@ -205,26 +205,20 @@ function getMarkersCircle() {
             setAttributes(g, {
                 transform: `rotate(${ang})`
             });
-            const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            let w, h, x, color;
             if (i % 6 === 0) {
-                w = dot * 20.5;
-                h = dot * 3;
-                x = radius - 0.215;
-                color = "#000000";
-                setAttributes(r, {
-                    x: x,
-                    y: -h / 2,
-                    width: w,
-                    height: h,
-                    fill: color,
-                    stroke: color,
+                const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                setAttributes(l, {
+                    x1: 7 * unitbase,
+                    y1: 0,
+                    x2: radius * 0.88,
+                    y2: 0,
+                    stroke: greycolor,
                     "stroke-width": dot,
+                    "stroke-linecap": "round"
                 });
-
+                g.appendChild(l);
             }
 
-            g.appendChild(r);
             mg.appendChild(g);
         }
         // hours markers
@@ -393,7 +387,7 @@ function getHourHandle() {
     const hg = document.createElementNS("http://www.w3.org/2000/svg", "g");
     const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
     setAttributes(l, {
-        x1: 7.5 * unitbase,
+        x1: 6.7 * unitbase,
         y1: 0,
         x2: radius * 0.97,
         y2: 0,
@@ -452,6 +446,7 @@ function getMoon(isMoonEvent) {
     }
     return document.createElement("div");
 }
+
 /** below are temporary components to help design the clock **/
 function getOuterRect() {
     const recEl = document.createElementNS("http://www.w3.org/2000/svg", "rect");
