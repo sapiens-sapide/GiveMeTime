@@ -91,7 +91,7 @@ function minuteRendering() {
     if (ephemDaysLeft === -1 || today.d !== today.now.getDate()) {
         dayRendering(position);
     }
-    tc.innerHTML = `${hour < 10 ? "0" + hour : hour} ${min < 10 ? "0" + min : min}`;
+    tc.innerHTML = `${hour < 10 ? "0" + hour : hour}  ${min < 10 ? "0" + min : min}`;
 }
 
 function dayRendering(position) {
