@@ -69,7 +69,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //today.now = new Date("2017-11-04T10:30:00");
+    //today.now = new Date("2017-05-24T13:55:00");
     today.now = new Date();
     if ((today.now.getSeconds() - seconds > 1) || (hour !== today.now.getHours()) || (min !== today.now.getMinutes())) {
         minuteRendering();

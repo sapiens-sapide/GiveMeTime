@@ -33,12 +33,13 @@ function getWatchCase() {
 }
 
 function timeDisplayOn() {
-    svgEl.appendChild(hh);
+    svgEl.appendChild(mc);
+    svgEl.appendChild(mh);
     if (ephemDaysLeft !== -1) {
         svgEl.appendChild(civilNightLength);
         svgEl.appendChild(nightLength);
     }
-    svgEl.appendChild(mh);
+    svgEl.appendChild(hh);
     svgEl.appendChild(secElems);
     svgEl.appendChild(tc);
 //svgEl.appendChild(getOuterRect());
@@ -51,7 +52,6 @@ function timeDisplayOn() {
         svgEl.appendChild(nm);
         svgEl.appendChild(mooncomp);
     }
-    svgEl.appendChild(mc);
     svgEl.appendChild(hc);
     timeOn = true;
 }
@@ -164,7 +164,6 @@ function getHoursCircle() {
         const txtG2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
         //const background2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         const ang2 = 15 * i;
-        const coord2 = coordinatesForPercent(ang2 / 360, 15 * dot);
         /*setAttributes(background2, {
             cx: coord2[0],
             cy: coord2[1],
@@ -174,17 +173,29 @@ function getHoursCircle() {
             transform: "translate(0, -0.022)"
         });*/
         const txt2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        setAttributes(txt2, {
-            "class": "hoursNum",
-            x: coord2[0],
-            y: coord2[1],
-            "font-size": unitbase * 0.4,
-            fill: "#000000",
-            style: `text-anchor: middle;font-family: ${smallFontFamily}`,
-            transform: "translate(0, -0.008)"
-        });
-        txt2.innerHTML = i;
-        //txtG2.appendChild(background2);
+        if (i % 2 === 0) {
+            const coord2 = coordinatesForPercent(ang2 / 360, 20 * dot);
+            setAttributes(txt2, {
+                "class": "hoursNum",
+                x: coord2[0],
+                y: coord2[1],
+                "font-size": unitbase * 0.6,
+                fill: "#000000",
+                style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
+                transform: "translate(-0.001, 0.001)"
+            });
+            const background2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            setAttributes(background2, {
+                cx: coord2[0],
+                cy: coord2[1],
+                r: unitbase * 0.42,
+                fill: "#FFFFFF",
+                "fill-opacity": 0.6,
+                transform: "translate(0, -0.02)"
+            });
+            txtG2.appendChild(background2);
+            txt2.innerHTML = i;
+        }
         txtG2.appendChild(txt2);
         hg.appendChild(txtG2);
     }
@@ -230,7 +241,7 @@ function getMarkersCircle() {
         const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         const w = dot * 2;
         const h = dot * 1;
-        const x = radius - ( dot * 2);
+        const x = radius - ( dot * 3);
         setAttributes(r, {
             x: x,
             y: -h / 2,
@@ -358,15 +369,18 @@ function getMinutesHandle() {
     });
     // arrow
     const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    const y = 0.07 * radius;
-    const x2 = 0.14 * radius;
+    const y = 0.05 * radius;
+    const x2 = 0.187 * radius;
     setAttributes(a, {
-        d: `m${0.85 * radius} ${y} 
+        d: `m${0.8 * radius} ${y} 
         l${x2} -${y} 
         l-${x2} -${y} 
         l-${1.3 * x2} ${y} 
         z`,
-        fill: bluecolor
+        fill: bluecolor,
+        "stroke-linejoin":"round",
+        stroke: bluecolor,
+        "stroke-width": dot,
     });
     const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
     setAttributes(l, {
@@ -389,18 +403,20 @@ function getHourHandle() {
     setAttributes(l, {
         x1: 0,
         y1: 0,
-        x2: radius * 0.97,
+        x2: radius * 0.885,
         y2: 0,
         stroke: redcolor,
-        "stroke-width": dot * 2,
+        "stroke-width": dot * 3,
         "stroke-linecap": "round"
     });
     const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     setAttributes(c, {
-        cx: radius - unitbase * 0.5,
+        cx: radius - unitbase * 0.62,
         cy: 0,
         r: unitbase * 0.45,
-        fill: redcolor,
+        stroke: redcolor,
+        fill: "transparent",
+        "stroke-width": dot,
     });
     hg.appendChild(l);
     hg.appendChild(c);
@@ -422,7 +438,7 @@ function getNoonMark() {
 
     setAttributes(g, {
         cx: 0,
-        cy: -0.905,
+        cy: -0.73,
         r: unitbase * 0.25,
         fill: greycolor,
     });
