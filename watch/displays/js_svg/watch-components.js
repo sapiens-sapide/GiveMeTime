@@ -173,7 +173,7 @@ function getHoursCircle() {
                 "class": "hoursNum",
                 id: "hour" + i,
                 x: coord2[0],
-                y: coord2[1],
+                y: coord2[1] - (dot * 0.5),
                 "font-size": unitbase * 0.55,
                 fill: "#000000",
                 style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
@@ -206,6 +206,7 @@ function getMarkersCircle() {
         const ang = (15 * i) - 90;
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
         if (i % 2 !== 0) { // odd markers
+
             setAttributes(g, {
                 transform: `rotate(${ang})`
             });
@@ -228,10 +229,26 @@ function getMarkersCircle() {
             setAttributes(g, {
                 transform: `rotate(${ang})`
             });
+            /*
             let r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
             let w = dot * 16;
             let h = dot * 13;
-            let x = radius - ( dot * 16.5);
+            let x = radius - ( dot * 18);
+            setAttributes(r, {
+                x: x,
+                y: -h / 2,
+                rx: dot * 4,
+                width: w,
+                height: h,
+                fill: greycolor,
+                "fill-opacity": 0.2
+            });
+            g.appendChild(r);
+            */
+            r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            w = dot * 36;
+            h = dot * 12;
+            x = radius - ( dot * 37);
             setAttributes(r, {
                 x: x,
                 y: -h / 2,
@@ -239,11 +256,10 @@ function getMarkersCircle() {
                 ry: dot * 4,
                 width: w,
                 height: h,
-                fill: greycolor,
-                "fill-opacity": 0.2
+                stroke: darkcolor,
+                "stroke-width": dot * 1.5,
+                fill: "transparent",
             });
-
-            g.appendChild(r);
             if (i % 6 === 0) { // quarter markers
                 setAttributes(g, {
                     transform: `rotate(${ang})`
@@ -261,11 +277,12 @@ function getMarkersCircle() {
                 g.appendChild(l);
                 mg.appendChild(g);
             } else {
-                r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                w = dot * 16;
-                h = dot * 13;
-                x = radius - ( dot * 35);
-                setAttributes(r, {
+                g.appendChild(r);
+                /*let rblue = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                let w = dot * 17;
+                let h = dot * 13;
+                let x = radius - ( dot * 35);
+                setAttributes(rblue, {
                     x: x,
                     y: -h / 2,
                     rx: dot * 4,
@@ -275,7 +292,20 @@ function getMarkersCircle() {
                     fill: bluecolor,
                     "fill-opacity": 0.8
                 });
-                g.appendChild(r);
+                g.appendChild(rblue);
+                /*rblue = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                w = dot * 1;
+                h = dot * 13;
+                x = radius - ( dot * 19);
+                setAttributes(rblue, {
+                    x: x,
+                    y: -h / 2,
+                    width: w,
+                    height: h,
+                    fill: bluecolor,
+                    "fill-opacity": 0.8
+                });
+                g.appendChild(rblue);*/
                 mg.appendChild(g);
             }
         }
