@@ -228,6 +228,7 @@ function getMarkersCircle() {
             setAttributes(g, {
                 transform: `rotate(${ang})`
             });
+            /*
             let r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
             let w = dot * 16;
             let h = dot * 13;
@@ -243,7 +244,7 @@ function getMarkersCircle() {
                 "fill-opacity": 0.2
             });
 
-            g.appendChild(r);
+            g.appendChild(r);*/
             if (i % 6 === 0) { // quarter markers
                 setAttributes(g, {
                     transform: `rotate(${ang})`
