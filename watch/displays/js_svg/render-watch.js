@@ -71,7 +71,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //today.now = new Date("2017-11-24T07:12:00");
+    //today.now = new Date("2017-06-24T08:50:00");
     today.now = new Date();
     if ((today.now.getSeconds() - seconds > 1) || (hour !== today.now.getHours()) || (min !== today.now.getMinutes())) {
         minuteRendering();
@@ -94,6 +94,20 @@ function minuteRendering() {
         dayRendering(position);
     }
     tc.innerHTML = `${hour < 10 ? "0" + hour : hour}  ${min < 10 ? "0" + min : min}`;
+
+    for (let i = 1; i < 24; i += 2) {
+        let h = document.getElementById("hour" + i);
+        h.setAttribute("fill-opacity", 0);
+    }
+
+    if (hour % 2 !== 0) {
+        let h = document.getElementById("hour" + hour);
+        h.setAttribute("fill-opacity", ((60 - min) / 60));
+    } else {
+        let h = document.getElementById("hour" + (hour + 1));
+        h.setAttribute("fill-opacity", (min / 60));
+    }
+
 }
 
 function dayRendering(position) {

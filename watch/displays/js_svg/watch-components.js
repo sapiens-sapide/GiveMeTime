@@ -122,7 +122,7 @@ function getArc(percent, strokeWidth, rad) {
 // sunrise and sunset are in minutes from midnight.
 function getNightArc(sunrise, sunset) {
     const nightLength = 86400 - (sunset - sunrise);
-    const nightArc = getArc(nightLength / 86400, 11 * dot, radius);
+    const nightArc = getArc(nightLength / 86400, 18 * dot, radius);
     const sunsetAngle = (sunset / 86400) * 360;
     nightArc.setAttribute("transform", `rotate(${sunsetAngle})`);
     return nightArc;
@@ -167,18 +167,30 @@ function getHoursCircle() {
         //const background2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         const ang2 = 15 * i;
         const txt2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        const coord2 = coordinatesForPercent(ang2 / 360, 17 * dot);
         if (i % 2 === 0) {
-            const coord2 = coordinatesForPercent(ang2 / 360, 17 * dot);
             setAttributes(txt2, {
                 "class": "hoursNum",
+                id: "hour" + i,
                 x: coord2[0],
                 y: coord2[1],
                 "font-size": unitbase * 0.55,
                 fill: "#000000",
                 style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
             });
-            txt2.innerHTML = i;
+        } else {
+            setAttributes(txt2, {
+                "class": "hoursNum",
+                id: "hour" + i,
+                x: coord2[0],
+                y: coord2[1],
+                "font-size": unitbase * 0.55,
+                fill: "#000000",
+                "fill-opacity": 0,
+                style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
+            });
         }
+        txt2.innerHTML = i;
         txtG2.appendChild(txt2);
         hg.appendChild(txtG2);
     }
@@ -429,7 +441,8 @@ function getHourHandle() {
         cy: 0,
         r: unitbase * 0.45,
         stroke: redcolor,
-        fill: "transparent",
+        fill: "#FFFFFF",
+        "fill-opacity": 0.75,
         "stroke-width": dot * 2,
     });
     hg.appendChild(l);
