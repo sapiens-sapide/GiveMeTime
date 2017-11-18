@@ -14,7 +14,8 @@ const nm = getNoonMark();
 const wdc = getWeekDayContainer();
 const dc = getDateContainer();
 const hc = getHoursCircle();
-const wc = getWatchCase();
+const wb = getWatchBorder();
+const wback = getWatchBackground();
 const mc = getMarkersCircle();
 let mooncomp = getMoon(0);
 
@@ -31,7 +32,8 @@ const b2 = getButton2();
 /** sync logic **/
 let ephemDaysLeft = -1; // how many days ahead are in local storage. -1 means no data for current day.
 
-svgEl.appendChild(wc);
+svgEl.appendChild(wback);
+svgEl.appendChild(wb);
 timeDisplayOn();
 
 /** buttons **/
@@ -69,7 +71,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //today.now = new Date("2017-05-24T13:55:00");
+    //today.now = new Date("2017-11-24T07:12:00");
     today.now = new Date();
     if ((today.now.getSeconds() - seconds > 1) || (hour !== today.now.getHours()) || (min !== today.now.getMinutes())) {
         minuteRendering();

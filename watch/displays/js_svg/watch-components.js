@@ -19,7 +19,7 @@ const secondsRadius = radius * 0.03;
 
 // returns the svg that represents the watchCase
 // for now, it's just the outer circle.
-function getWatchCase() {
+function getWatchBorder() {
     const r = radius - (dot / 2);
     const circEl = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     setAttributes(circEl, {
@@ -27,12 +27,24 @@ function getWatchCase() {
         r: r,
         stroke: darkcolor,
         "stroke-width": dot,
+        fill: "transparent"
+    });
+    return circEl;
+}
+
+function getWatchBackground() {
+    const r = radius - (dot / 2);
+    const circEl = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    setAttributes(circEl, {
+        id: "case",
+        r: r,
         fill: "#FFFFFF"
     });
     return circEl;
 }
 
 function timeDisplayOn() {
+    svgEl.removeChild(wb);
     svgEl.appendChild(mc);
     svgEl.appendChild(mh);
     if (ephemDaysLeft !== -1) {
@@ -53,6 +65,7 @@ function timeDisplayOn() {
         svgEl.appendChild(mooncomp);
     }
     svgEl.appendChild(hc);
+    svgEl.appendChild(wb);
     timeOn = true;
 }
 
@@ -131,18 +144,8 @@ function getHoursCircle() {
         if (i % 3 !== 0) {
             //minutes
             const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
-            const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
             const ang = 30 * i;
             const coord = coordinatesForPercent(ang / 360, 55 * dot);
-            setAttributes(background, {
-                cx: coord[0],
-                cy: coord[1],
-                r: unitbase * 0.6,
-                fill: bluecolor,
-                stroke: "#FFFFFF",
-                "stroke-width": dot,
-                transform: "translate(0, -0.022)"
-            });
             const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
             setAttributes(txt, {
                 "class": "hoursNum",
@@ -151,10 +154,9 @@ function getHoursCircle() {
                 "font-size": unitbase * 0.55,
                 fill: "#FFFFFF",
                 style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
-                transform: "translate(-0.001, -0.002)"
             });
             txt.innerHTML = i * 5;
-            txtG.appendChild(background);
+            //txtG.appendChild(background);
             txtG.appendChild(txt);
             hg.appendChild(txtG);
         }
@@ -164,36 +166,17 @@ function getHoursCircle() {
         const txtG2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
         //const background2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         const ang2 = 15 * i;
-        /*setAttributes(background2, {
-            cx: coord2[0],
-            cy: coord2[1],
-            r: unitbase * 0.35,
-            fill: "#FFFFFF",
-            "fill-opacity": 0.7,
-            transform: "translate(0, -0.022)"
-        });*/
         const txt2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
         if (i % 2 === 0) {
-            const coord2 = coordinatesForPercent(ang2 / 360, 20 * dot);
+            const coord2 = coordinatesForPercent(ang2 / 360, 17 * dot);
             setAttributes(txt2, {
                 "class": "hoursNum",
                 x: coord2[0],
                 y: coord2[1],
-                "font-size": unitbase * 0.6,
-                fill: "#000000",
-                style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
-                transform: "translate(-0.001, 0.001)"
-            });
-            const background2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            setAttributes(background2, {
-                cx: coord2[0],
-                cy: coord2[1],
-                r: unitbase * 0.42,
+                "font-size": unitbase * 0.55,
                 fill: "#FFFFFF",
-                "fill-opacity": 0.6,
-                transform: "translate(0, -0.02)"
+                style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
             });
-            txtG2.appendChild(background2);
             txt2.innerHTML = i;
         }
         txtG2.appendChild(txt2);
@@ -208,15 +191,51 @@ function getHoursCircle() {
 function getMarkersCircle() {
     const mg = document.createElementNS("http://www.w3.org/2000/svg", "g");
     for (let i = 0; i < 24; i++) {
-
-        // minutes markers
-        if (i % 2 === 0) {
-            const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-            const ang = (15 * i) - 90;
+        const ang = (15 * i) - 90;
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        if (i % 2 !== 0) { // odd markers
             setAttributes(g, {
                 transform: `rotate(${ang})`
             });
-            if (i % 6 === 0) {
+            const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            const w = dot * 2;
+            const h = dot * 1;
+            const x = radius - ( dot * 3);
+            setAttributes(r, {
+                x: x,
+                y: -h / 2,
+                width: w,
+                height: h,
+                fill: greycolor,
+                stroke: greycolor,
+                "stroke-width": dot
+            });
+            g.appendChild(r);
+            mg.appendChild(g);
+        } else { // even makers
+            setAttributes(g, {
+                transform: `rotate(${ang})`
+            });
+            let r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            let w = dot * 16;
+            let h = dot * 13;
+            let x = radius - ( dot * 16.5);
+            setAttributes(r, {
+                x: x,
+                y: -h / 2,
+                rx: dot * 5,
+                ry: dot * 5,
+                width: w,
+                height: h,
+                fill: greycolor,
+                "fill-opacity": 0.5
+            });
+
+            g.appendChild(r);
+            if (i % 6 === 0) { // quarter markers
+                setAttributes(g, {
+                    transform: `rotate(${ang})`
+                });
                 const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
                 setAttributes(l, {
                     x1: 7 * unitbase,
@@ -228,31 +247,26 @@ function getMarkersCircle() {
                     "stroke-linecap": "round"
                 });
                 g.appendChild(l);
+                mg.appendChild(g);
+            } else {
+                r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                w = dot * 16;
+                h = dot * 13;
+                x = radius - ( dot * 35);
+                setAttributes(r, {
+                    x: x,
+                    y: -h / 2,
+                    rx: dot * 4,
+                    ry: dot * 4,
+                    width: w,
+                    height: h,
+                    fill: bluecolor,
+                    "fill-opacity": 0.5
+                });
+                g.appendChild(r);
+                mg.appendChild(g);
             }
-
-            mg.appendChild(g);
         }
-        // hours markers
-        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        const ang = (15 * i) - 60;
-        setAttributes(g, {
-            transform: `rotate(${ang})`
-        });
-        const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-        const w = dot * 2;
-        const h = dot * 1;
-        const x = radius - ( dot * 3);
-        setAttributes(r, {
-            x: x,
-            y: -h / 2,
-            width: w,
-            height: h,
-            fill: greycolor,
-            stroke: greycolor,
-            "stroke-width": dot
-        });
-        g.appendChild(r);
-        mg.appendChild(g);
     }
     return mg;
 }
@@ -370,15 +384,15 @@ function getMinutesHandle() {
     // arrow
     const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
     const y = 0.05 * radius;
-    const x2 = 0.187 * radius;
+    const x2 = 0.15 * radius;
     setAttributes(a, {
-        d: `m${0.8 * radius} ${y} 
+        d: `m${0.83 * radius} ${y} 
         l${x2} -${y} 
         l-${x2} -${y} 
-        l-${1.3 * x2} ${y} 
+        l-${1.85 * x2} ${y} 
         z`,
         fill: bluecolor,
-        "stroke-linejoin":"round",
+        "stroke-linejoin": "round",
         stroke: bluecolor,
         "stroke-width": dot,
     });
@@ -403,7 +417,7 @@ function getHourHandle() {
     setAttributes(l, {
         x1: 0,
         y1: 0,
-        x2: radius * 0.885,
+        x2: radius * 0.89,
         y2: 0,
         stroke: redcolor,
         "stroke-width": dot * 3,
@@ -411,12 +425,12 @@ function getHourHandle() {
     });
     const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     setAttributes(c, {
-        cx: radius - unitbase * 0.62,
+        cx: radius - unitbase * 0.55,
         cy: 0,
         r: unitbase * 0.45,
         stroke: redcolor,
         fill: "transparent",
-        "stroke-width": dot,
+        "stroke-width": dot * 2,
     });
     hg.appendChild(l);
     hg.appendChild(c);
