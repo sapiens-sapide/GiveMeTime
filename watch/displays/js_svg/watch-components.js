@@ -174,7 +174,7 @@ function getHoursCircle() {
                 x: coord2[0],
                 y: coord2[1],
                 "font-size": unitbase * 0.55,
-                fill: "#FFFFFF",
+                fill: "#000000",
                 style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
             });
             txt2.innerHTML = i;
@@ -223,12 +223,12 @@ function getMarkersCircle() {
             setAttributes(r, {
                 x: x,
                 y: -h / 2,
-                rx: dot * 5,
-                ry: dot * 5,
+                rx: dot * 4,
+                ry: dot * 4,
                 width: w,
                 height: h,
                 fill: greycolor,
-                "fill-opacity": 0.5
+                "fill-opacity": 0.2
             });
 
             g.appendChild(r);
@@ -261,7 +261,7 @@ function getMarkersCircle() {
                     width: w,
                     height: h,
                     fill: bluecolor,
-                    "fill-opacity": 0.5
+                    "fill-opacity": 0.8
                 });
                 g.appendChild(r);
                 mg.appendChild(g);
