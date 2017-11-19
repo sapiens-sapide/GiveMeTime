@@ -122,7 +122,7 @@ function getArc(percent, strokeWidth, rad) {
 // sunrise and sunset are in minutes from midnight.
 function getNightArc(sunrise, sunset) {
     const nightLength = 86400 - (sunset - sunrise);
-    const nightArc = getArc(nightLength / 86400, 18 * dot, radius);
+    const nightArc = getArc(nightLength / 86400, 15 * dot, radius);
     const sunsetAngle = (sunset / 86400) * 360;
     nightArc.setAttribute("transform", `rotate(${sunsetAngle})`);
     return nightArc;
@@ -167,7 +167,7 @@ function getHoursCircle() {
         //const background2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         const ang2 = 15 * i;
         const txt2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        const coord2 = coordinatesForPercent(ang2 / 360, 17 * dot);
+        const coord2 = coordinatesForPercent(ang2 / 360, 18 * dot);
         if (i % 2 === 0) {
             setAttributes(txt2, {
                 "class": "hoursNum",
@@ -228,23 +228,6 @@ function getMarkersCircle() {
             setAttributes(g, {
                 transform: `rotate(${ang})`
             });
-            /*
-            let r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-            let w = dot * 16;
-            let h = dot * 13;
-            let x = radius - ( dot * 16.5);
-            setAttributes(r, {
-                x: x,
-                y: -h / 2,
-                rx: dot * 4,
-                ry: dot * 4,
-                width: w,
-                height: h,
-                fill: greycolor,
-                "fill-opacity": 0.2
-            });
-
-            g.appendChild(r);*/
             if (i % 6 === 0) { // quarter markers
                 setAttributes(g, {
                     transform: `rotate(${ang})`
@@ -263,18 +246,34 @@ function getMarkersCircle() {
                 mg.appendChild(g);
             } else {
                 r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                w = dot * 16;
-                h = dot * 13;
-                x = radius - ( dot * 35);
+                w = dot * 20;
+                h = dot * 14;
+                x = radius - ( dot * 37);
                 setAttributes(r, {
                     x: x,
                     y: -h / 2,
-                    rx: dot * 4,
-                    ry: dot * 4,
+                    rx: dot * 3,
+                    ry: dot * 3,
                     width: w,
                     height: h,
                     fill: bluecolor,
                     "fill-opacity": 0.8
+                });
+                g.appendChild(r);
+                r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                w = dot * 36.5;
+                h = dot * 14;
+                x = radius - ( dot * 37);
+                setAttributes(r, {
+                    x: x,
+                    y: -h / 2,
+                    rx: dot * 3,
+                    ry: dot * 3,
+                    width: w,
+                    height: h,
+                    stroke: darkcolor,
+                    "stroke-width": dot * 0.5,
+                    fill: "transparent",
                 });
                 g.appendChild(r);
                 mg.appendChild(g);
@@ -438,7 +437,7 @@ function getHourHandle() {
     });
     const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     setAttributes(c, {
-        cx: radius - unitbase * 0.55,
+        cx: radius - unitbase * 0.57,
         cy: 0,
         r: unitbase * 0.45,
         stroke: redcolor,
