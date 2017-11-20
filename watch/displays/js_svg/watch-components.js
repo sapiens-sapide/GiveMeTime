@@ -260,23 +260,20 @@ function getMarkersCircle() {
                     "fill-opacity": 0.8
                 });
                 g.appendChild(r);
-                /*
                 r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-                w = dot * 36.5;
-                h = dot * 14;
-                x = radius - ( dot * 37);
+                w = dot * 1;
+                h = dot * 7;
+                x = radius - ( dot * 2);
                 setAttributes(r, {
                     x: x,
                     y: -h / 2,
-                    rx: dot * 3,
-                    ry: dot * 3,
                     width: w,
                     height: h,
+                    fill: darkcolor,
                     stroke: darkcolor,
-                    "stroke-width": dot * 0.5,
-                    fill: "transparent",
+                    "stroke-width": dot
                 });
-                g.appendChild(r);*/
+                g.appendChild(r);
                 mg.appendChild(g);
             }
         }
