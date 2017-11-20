@@ -175,7 +175,7 @@ function getHoursCircle() {
                 x: coord2[0],
                 y: coord2[1],
                 "font-size": unitbase * 0.55,
-                fill: "#000000",
+                fill: greycolor,
                 style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
             });
         } else {
@@ -185,7 +185,7 @@ function getHoursCircle() {
                 x: coord2[0],
                 y: coord2[1],
                 "font-size": unitbase * 0.55,
-                fill: "#000000",
+                fill: greycolor,
                 "fill-opacity": 0,
                 style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
             });
@@ -260,6 +260,7 @@ function getMarkersCircle() {
                     "fill-opacity": 0.8
                 });
                 g.appendChild(r);
+                /*
                 r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
                 w = dot * 36.5;
                 h = dot * 14;
@@ -275,7 +276,7 @@ function getMarkersCircle() {
                     "stroke-width": dot * 0.5,
                     fill: "transparent",
                 });
-                g.appendChild(r);
+                g.appendChild(r);*/
                 mg.appendChild(g);
             }
         }
