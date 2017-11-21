@@ -252,12 +252,12 @@ function getMarkersCircle() {
                 setAttributes(r, {
                     x: x,
                     y: -h / 2,
-                    rx: dot * 3,
-                    ry: dot * 3,
+                    rx: dot * 13,
+                    ry: dot * 13,
                     width: w,
                     height: h,
                     fill: bluecolor,
-                    "fill-opacity": 0.8
+                    "fill-opacity": 0.9
                 });
                 g.appendChild(r);
                 r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -286,11 +286,11 @@ function getTimeContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
         x: 0,
-        y: radius * 0.13,
+        y: radius * 0.11,
         style: `
         text-anchor: middle;
         font-family: ${fontBold};
-        font-size: ${4 * unitbase};
+        font-size: ${3.5 * unitbase};
         letter-spacing: ${-0.05 * unitbase};
         fill: ${darkcolor};`
     });
@@ -302,7 +302,7 @@ function getWeekDayContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
         x: -0.01 * radius,
-        y: -0.38 * radius,
+        y: -0.32 * radius,
         style: `
         text-anchor: end;
         font-family: ${fontFamily};
@@ -326,7 +326,7 @@ function getDateContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
         x: 0.01 * radius,
-        y: -0.35 * radius,
+        y: -0.29 * radius,
         style: `
         text-anchor: start;
         font-family: ${fontBold};
@@ -364,12 +364,12 @@ function getSecElems() {
     const c2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     //const dasharray = gaugeParam(secondsRadius, 0); // default settings to 0
     setAttributes(c2, {
-        r: unitbase * 5.5,
+        r: unitbase * 5,
         //stroke: greycolor,
         //"stroke-width": dot,
         //"stroke-opacity": 0.1,
         fill: "#ffffff",
-        "fill-opacity": 0.8
+        "fill-opacity": 0.9
         //"stroke-dasharray": dasharray[0] + " " + dasharray[1]
     });
     g.appendChild(c2);
@@ -389,7 +389,8 @@ function getMinutesHandle() {
         height: thickness,
         stroke: darkcolor,
         "stroke-width": dot * 1,
-        fill: "none",
+        fill: bluecolor,
+        "fill-opacity": 0.5
     });
     // arrow
     const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
