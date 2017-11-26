@@ -245,6 +245,7 @@ function getMarkersCircle() {
                 g.appendChild(l);
                 mg.appendChild(g);
             } else {
+                /*
                 r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
                 w = dot * 20;
                 h = dot * 14;
@@ -258,8 +259,22 @@ function getMarkersCircle() {
                     height: h,
                     fill: bluecolor,
                     "fill-opacity": 0.9
+                });*/
+                const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                const y = 0.04 * radius;
+                const x2 = 0.07 * radius;
+                setAttributes(a, {
+                    d: `m${0.83 * radius} ${y} 
+                    l${x2} -${y} 
+                    l-${x2} -${y} 
+                    l-${1.5 * x2} ${y} 
+                    z`,
+                    fill: bluecolor,
+                    "stroke-linejoin": "round",
+                    stroke: bluecolor,
+                    "stroke-width": dot,
                 });
-                g.appendChild(r);
+                g.appendChild(a);
                 r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
                 w = dot * 1;
                 h = dot * 7;
