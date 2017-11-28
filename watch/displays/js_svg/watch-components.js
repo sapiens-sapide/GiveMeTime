@@ -316,7 +316,7 @@ function getTimeContainer() {
 function getWeekDayContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
-        x: -0.01 * radius,
+        x: -0.02 * radius,
         y: -0.25 * radius,
         style: `
         text-anchor: end;
@@ -340,7 +340,7 @@ function getWeekDayContainer() {
 function getDateContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
-        x: 0.01 * radius,
+        x: 0.02 * radius,
         y: -0.23 * radius,
         style: `
         text-anchor: start;
@@ -397,7 +397,7 @@ function getMinutesHandle() {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     //rounded rectangle
     const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    const thickness = dot * 3;
+    const thickness = dot * 6;
     setAttributes(r, {
         x: 0,
         y: -thickness / 2,
