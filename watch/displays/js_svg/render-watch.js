@@ -71,7 +71,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //today.now = new Date("2017-11-24T13:55:30");
+    //today.now = new Date("2017-12-03T17:43:00");
     today.now = new Date();
     if ((today.now.getSeconds() - seconds > 1) || (hour !== today.now.getHours()) || (min !== today.now.getMinutes())) {
         minuteRendering();
@@ -93,7 +93,7 @@ function minuteRendering() {
     if (ephemDaysLeft === -1 || today.d !== today.now.getDate()) {
         dayRendering(position);
     }
-    tc.innerHTML = `${hour < 10 ? "0" + hour : hour}  ${min < 10 ? "0" + min : min}`;
+    tc.innerHTML = `${hour < 10 ? "0" + hour : hour}   ${min < 10 ? "0" + min : min}`;
 
     for (let i = 1; i < 24; i += 2) {
         let h = document.getElementById("hour" + i);

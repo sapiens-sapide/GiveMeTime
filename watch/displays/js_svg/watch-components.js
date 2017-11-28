@@ -15,7 +15,7 @@ const fontFamily = "asapregular";
 const fontBold = "asapbold";
 const smallFontFamily = "robotoregular";
 const weekDays = ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"];
-const secondsRadius = radius * 0.03;
+const secondsRadius = radius * 0.02;
 
 // returns the svg that represents the watchCase
 // for now, it's just the outer circle.
@@ -238,7 +238,7 @@ function getMarkersCircle() {
                     y1: 0,
                     x2: radius * 0.88,
                     y2: 0,
-                    stroke: greycolor,
+                    stroke: bluecolor,
                     "stroke-width": dot,
                     "stroke-linecap": "round"
                 });
@@ -301,11 +301,11 @@ function getTimeContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
         x: 0,
-        y: radius * 0.11,
+        y: radius * 0.08,
         style: `
         text-anchor: middle;
         font-family: ${fontBold};
-        font-size: ${3.5 * unitbase};
+        font-size: ${2.5 * unitbase};
         letter-spacing: ${-0.05 * unitbase};
         fill: ${darkcolor};`
     });
@@ -317,7 +317,7 @@ function getWeekDayContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
         x: -0.01 * radius,
-        y: -0.32 * radius,
+        y: -0.25 * radius,
         style: `
         text-anchor: end;
         font-family: ${fontFamily};
@@ -341,11 +341,11 @@ function getDateContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
         x: 0.01 * radius,
-        y: -0.29 * radius,
+        y: -0.23 * radius,
         style: `
         text-anchor: start;
         font-family: ${fontBold};
-        font-size: ${2 * unitbase};
+        font-size: ${1.5 * unitbase};
         fill: ${darkcolor}`
     });
     const background = document.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -379,13 +379,14 @@ function getSecElems() {
     const c2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     //const dasharray = gaugeParam(secondsRadius, 0); // default settings to 0
     setAttributes(c2, {
-        r: unitbase * 5,
+        r: unitbase * 4,
         //stroke: greycolor,
         //"stroke-width": dot,
         //"stroke-opacity": 0.1,
         fill: "#ffffff",
-        "fill-opacity": 0.9
-        //"stroke-dasharray": dasharray[0] + " " + dasharray[1]
+        "fill-opacity": .95,
+        /*stroke: greycolor,
+        "stroke-width": dot * 0.1,*/
     });
     g.appendChild(c2);
     g.appendChild(c1);
@@ -446,7 +447,7 @@ function getHourHandle() {
         x2: radius * 0.89,
         y2: 0,
         stroke: redcolor,
-        "stroke-width": dot * 3,
+        "stroke-width": dot * 2,
         "stroke-linecap": "round"
     });
     const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -493,7 +494,7 @@ function getMoon(isMoonEvent) {
         const fill = isMoonEvent === 1 ? "transparent" : "#999999";
         setAttributes(moon, {
             cx: 0,
-            cy: 0.35,
+            cy: 0.3,
             r: unitbase * 0.7,
             fill: fill,
             stroke: "#4D4D4D",
