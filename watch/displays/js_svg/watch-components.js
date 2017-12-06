@@ -45,8 +45,8 @@ function getWatchBackground() {
 
 function timeDisplayOn() {
     svgEl.removeChild(wb);
-    svgEl.appendChild(mc);
     svgEl.appendChild(mh);
+    svgEl.appendChild(mc);
     if (ephemDaysLeft !== -1) {
         svgEl.appendChild(civilNightLength);
         svgEl.appendChild(nightLength);
@@ -245,21 +245,23 @@ function getMarkersCircle() {
                 g.appendChild(l);
                 mg.appendChild(g);
             } else {
-                /*
+
                 r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
                 w = dot * 20;
-                h = dot * 14;
+                h = dot * 15;
                 x = radius - ( dot * 37);
                 setAttributes(r, {
                     x: x,
                     y: -h / 2,
-                    rx: dot * 13,
-                    ry: dot * 13,
+                    rx: dot * 3,
+                    ry: dot * 3,
                     width: w,
                     height: h,
-                    fill: bluecolor,
-                    "fill-opacity": 0.9
-                });*/
+                    fill: darkcolor,
+                    "fill-opacity": 0.8
+                });
+                g.append(r);
+                /*
                 const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 const y = 0.04 * radius;
                 const x2 = 0.07 * radius;
@@ -274,10 +276,10 @@ function getMarkersCircle() {
                     stroke: darkcolor,
                     "stroke-width": dot,
                 });
-                g.appendChild(a);
+                g.appendChild(a);*/
                 r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
                 w = dot * 1;
-                h = dot * 7;
+                h = dot * 15;
                 x = radius - ( dot * 2);
                 setAttributes(r, {
                     x: x,
@@ -418,7 +420,7 @@ function getMinutesHandle() {
         l-${1.85 * x2} ${y} 
         z`,
         fill: bluecolor,
-        "fill-opacity": 0.85,
+        "fill-opacity": 1,
         "stroke-linejoin": "round",
         stroke: bluecolor,
         "stroke-width": dot,
