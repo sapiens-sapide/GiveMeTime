@@ -401,7 +401,7 @@ function getMinutesHandle() {
     setAttributes(r, {
         x: 0,
         y: -thickness / 2,
-        width: radius - dot * 25,
+        width: radius - dot * 55,
         height: thickness,
         stroke: bluecolor,
         "stroke-width": dot * 1,
@@ -418,6 +418,7 @@ function getMinutesHandle() {
         l-${1.85 * x2} ${y} 
         z`,
         fill: bluecolor,
+        "fill-opacity": 0.85,
         "stroke-linejoin": "round",
         stroke: bluecolor,
         "stroke-width": dot,
