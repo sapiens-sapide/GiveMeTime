@@ -238,7 +238,7 @@ function getMarkersCircle() {
                     y1: 0,
                     x2: radius * 0.88,
                     y2: 0,
-                    stroke: bluecolor,
+                    stroke: darkcolor,
                     "stroke-width": dot,
                     "stroke-linecap": "round"
                 });
@@ -269,9 +269,9 @@ function getMarkersCircle() {
                     l-${x2} -${y} 
                     l-${1.5 * x2} ${y} 
                     z`,
-                    fill: bluecolor,
+                    fill: darkcolor,
                     "stroke-linejoin": "round",
-                    stroke: bluecolor,
+                    stroke: darkcolor,
                     "stroke-width": dot,
                 });
                 g.appendChild(a);
@@ -403,10 +403,9 @@ function getMinutesHandle() {
         y: -thickness / 2,
         width: radius - dot * 25,
         height: thickness,
-        stroke: darkcolor,
+        stroke: bluecolor,
         "stroke-width": dot * 1,
         fill: bluecolor,
-        "fill-opacity": 0.5
     });
     // arrow
     const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
