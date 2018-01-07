@@ -98,14 +98,20 @@ function minuteRendering() {
     for (let i = 1; i < 24; i += 2) {
         let h = document.getElementById("hour" + i);
         h.setAttribute("fill-opacity", 0);
+        let m = document.getElementById("odd-mark-" + i);
+        m.setAttribute("opacity", 0);
     }
 
     if (hour % 2 !== 0) {
         let h = document.getElementById("hour" + hour);
         h.setAttribute("fill-opacity", ((60 - min) / 60));
+        let m = document.getElementById("odd-mark-" + hour);
+        m.setAttribute("opacity", ((60 - min) / 60));
     } else {
         let h = document.getElementById("hour" + (hour + 1));
         h.setAttribute("fill-opacity", (min / 60));
+        let m = document.getElementById("odd-mark-" + (hour + 1));
+        m.setAttribute("opacity", (min / 60));
     }
 
 }

@@ -140,27 +140,6 @@ function getHoursCircle() {
     setAttributes(hg, {
         transform: `translate(0, ${unitbase * 0.2})`
     });
-    for (let i = 0; i < 12; i++) {
-        /*if (i % 3 !== 0) {
-            //minutes
-            const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
-            const ang = 30 * i;
-            const coord = coordinatesForPercent(ang / 360, 55 * dot);
-            const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            setAttributes(txt, {
-                "class": "hoursNum",
-                x: coord[0],
-                y: coord[1],
-                "font-size": unitbase * 0.55,
-                fill: "#FFFFFF",
-                style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
-            });
-            txt.innerHTML = i * 5;
-            //txtG.appendChild(background);
-            txtG.appendChild(txt);
-            hg.appendChild(txtG);
-        }*/
-    }
     for (let i = 0; i < 24; i++) {
         // hours
         const txtG2 = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -222,6 +201,19 @@ function getMarkersCircle() {
                 stroke: greycolor,
                 "stroke-width": dot
             });
+            const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            setAttributes(l, {
+                x1: 8 * unitbase,
+                y1: 0,
+                x2: radius * 0.88,
+                y2: 0,
+                stroke: darkcolor,
+                id: "odd-mark-" + i,
+                "opacity": 0,
+                "stroke-width": dot,
+                "stroke-linecap": "round"
+            });
+            g.appendChild(l);
             g.appendChild(r);
             mg.appendChild(g);
         } else { // even makers
