@@ -377,7 +377,7 @@ function getSecElems() {
         //"stroke-width": dot,
         //"stroke-opacity": 0.1,
         fill: "#ffffff",
-        "fill-opacity": .95,
+        "fill-opacity": .85,
         /*stroke: greycolor,
         "stroke-width": dot * 0.1,*/
     });
