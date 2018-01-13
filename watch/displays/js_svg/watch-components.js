@@ -122,7 +122,7 @@ function getArc(percent, strokeWidth, rad) {
 // sunrise and sunset are in minutes from midnight.
 function getNightArc(sunrise, sunset) {
     const nightLength = 86400 - (sunset - sunrise);
-    const nightArc = getArc(nightLength / 86400, 15 * dot, radius);
+    const nightArc = getArc(nightLength / 86400, 14 * dot, radius);
     const sunsetAngle = (sunset / 86400) * 360;
     nightArc.setAttribute("transform", `rotate(${sunsetAngle})`);
     return nightArc;
@@ -386,7 +386,7 @@ function getMinutesHandle() {
     });
     // arrow
     const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    const y = 0.05 * radius;
+    const y = 0.065 * radius;
     const x2 = 0.15 * radius;
     setAttributes(a, {
         d: `m${0.83 * radius} ${y} 
@@ -421,17 +421,18 @@ function getHourHandle() {
     setAttributes(l, {
         x1: 0,
         y1: 0,
-        x2: radius * 0.52,
+        x2: radius * 0.64,
         y2: 0,
         stroke: redcolor,
-        "stroke-width": dot * 11,
+        "stroke-width": 2 * unitbase * 0.4,
         "stroke-linecap": "round"
     });
-    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
     setAttributes(c, {
-        cx: radius - unitbase * 0.57,
+        cx: radius - unitbase * 0.58,
         cy: 0,
-        r: unitbase * 0.45,
+        rx: unitbase * 0.46,
+        ry: unitbase * 0.4,
         stroke: redcolor,
         "fill-opacity": 0,
         "stroke-width": dot * 2,
@@ -456,7 +457,7 @@ function getNoonMark() {
 
     setAttributes(g, {
         cx: 0,
-        cy: -0.58,
+        cy: -0.705,
         r: unitbase * 0.25,
         fill: greycolor,
     });
