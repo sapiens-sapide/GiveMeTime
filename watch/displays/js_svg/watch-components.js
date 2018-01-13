@@ -9,7 +9,7 @@ const unitbase = 0.1; // = 1 em = 16px
 const dot = 0.625e-2; // currently 1px
 const darkcolor = "#000000";
 const bluecolor = "#4f83cc";
-const redcolor = "#b4a647";
+const redcolor = "#c67100";
 const greycolor = "#656363";
 const fontFamily = "asapregular";
 const fontBold = "asapbold";
@@ -154,7 +154,7 @@ function getHoursCircle() {
                 x: coord2[0],
                 y: coord2[1],
                 "font-size": unitbase * 0.55,
-                fill: greycolor,
+                fill: darkcolor,
                 style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
             });
         } else {
@@ -164,7 +164,7 @@ function getHoursCircle() {
                 x: coord2[0],
                 y: coord2[1],
                 "font-size": unitbase * 0.55,
-                fill: greycolor,
+                fill: darkcolor,
                 "fill-opacity": 0,
                 style: `text-anchor: middle;font-family: ${smallFontFamily};font-weight:bold;`,
             });
@@ -252,22 +252,6 @@ function getMarkersCircle() {
                     "fill-opacity": 0.8
                 });
                 g.append(r);
-                /*
-                const a = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                const y = 0.04 * radius;
-                const x2 = 0.07 * radius;
-                setAttributes(a, {
-                    d: `m${0.83 * radius} ${y} 
-                    l${x2} -${y} 
-                    l-${x2} -${y} 
-                    l-${1.5 * x2} ${y} 
-                    z`,
-                    fill: darkcolor,
-                    "stroke-linejoin": "round",
-                    stroke: darkcolor,
-                    "stroke-width": dot,
-                });
-                g.appendChild(a);*/
                 r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
                 w = dot * 1;
                 h = dot * 6;
@@ -449,8 +433,7 @@ function getHourHandle() {
         cy: 0,
         r: unitbase * 0.45,
         stroke: redcolor,
-        fill: "#FFFFFF",
-        "fill-opacity": 0.75,
+        "fill-opacity": 0,
         "stroke-width": dot * 2,
     });
     hg.appendChild(l);
@@ -473,7 +456,7 @@ function getNoonMark() {
 
     setAttributes(g, {
         cx: 0,
-        cy: -0.69,
+        cy: -0.58,
         r: unitbase * 0.25,
         fill: greycolor,
     });
