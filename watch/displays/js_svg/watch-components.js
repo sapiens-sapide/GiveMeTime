@@ -8,14 +8,14 @@ const radius = 1;
 const unitbase = 0.1; // = 1 em = 16px
 const dot = 0.625e-2; // currently 1px
 const darkcolor = "#000000";
-const bluecolor = "#0D66FD";
-const redcolor = "#FB2733";
+const bluecolor = "#4f83cc";
+const redcolor = "#b4a647";
 const greycolor = "#656363";
 const fontFamily = "asapregular";
 const fontBold = "asapbold";
 const smallFontFamily = "robotoregular";
 const weekDays = ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"];
-const secondsRadius = radius * 0.02;
+const secondsRadius = radius * 0.035;
 
 // returns the svg that represents the watchCase
 // for now, it's just the outer circle.
@@ -377,7 +377,7 @@ function getSecElems() {
         //"stroke-width": dot,
         //"stroke-opacity": 0.1,
         fill: "#ffffff",
-        "fill-opacity": .85,
+        "fill-opacity": .90,
         /*stroke: greycolor,
         "stroke-width": dot * 0.1,*/
     });
@@ -390,7 +390,7 @@ function getMinutesHandle() {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     //rounded rectangle
     const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    const thickness = dot * 6;
+    const thickness = dot * 8;
     setAttributes(r, {
         x: 0,
         y: -thickness / 2,
@@ -408,7 +408,7 @@ function getMinutesHandle() {
         d: `m${0.83 * radius} ${y} 
         l${x2} -${y} 
         l-${x2} -${y} 
-        l-${1.85 * x2} ${y} 
+        l-${2.5 * x2} ${y} 
         z`,
         fill: bluecolor,
         "fill-opacity": 1,
@@ -437,10 +437,10 @@ function getHourHandle() {
     setAttributes(l, {
         x1: 0,
         y1: 0,
-        x2: radius * 0.89,
+        x2: radius * 0.52,
         y2: 0,
         stroke: redcolor,
-        "stroke-width": dot * 2,
+        "stroke-width": dot * 11,
         "stroke-linecap": "round"
     });
     const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
