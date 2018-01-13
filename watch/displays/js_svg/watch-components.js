@@ -424,15 +424,14 @@ function getHourHandle() {
         x2: radius * 0.64,
         y2: 0,
         stroke: redcolor,
-        "stroke-width": 2 * unitbase * 0.4,
+        "stroke-width": dot * 11,
         "stroke-linecap": "round"
     });
-    const c = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     setAttributes(c, {
-        cx: radius - unitbase * 0.58,
+        cx: radius - unitbase * 0.585,
         cy: 0,
-        rx: unitbase * 0.46,
-        ry: unitbase * 0.4,
+        r: unitbase * 0.47,
         stroke: redcolor,
         "fill-opacity": 0,
         "stroke-width": dot * 2,
