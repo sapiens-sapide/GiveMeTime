@@ -11,6 +11,7 @@ import (
 // all times are given in minutes, starting at midnight
 type DayEphemeris struct {
 	Date              time.Time
+	Midnight          time.Time
 	Sun               SunEphemeris
 	Moon              MoonEphemeris
 	EquinoxOrSolstice bool // true if solstice or equinox is within the current day
@@ -34,15 +35,21 @@ type MoonEphemeris struct {
 }
 
 func EphemerisForDay(t time.Time, lat, lon float64) (eph DayEphemeris, err error) {
-	//reset current time to midnight
-	eph.Date = t.Add(-(time.Duration(t.Hour()) * time.Hour) - (time.Duration(t.Minute()) * time.Minute) - (time.Duration(t.Second()) * time.Second))
-	o := astro.NewObserver(eph.Date, lat, lon)
-	if o == nil {
+	eph.Date = t
+	//get midnight for current date
+	eph.Midnight = t.Add(-(time.Duration(t.Hour()) * time.Hour) - (time.Duration(t.Minute()) * time.Minute) - (time.Duration(t.Second()) * time.Second))
+	oNow := astro.NewObserver(eph.Date, lat, lon)
+	if oNow == nil {
 		fmt.Println("Error when creating observer")
 		return
 	}
-	eph.Moon.IsMoonEvent = astro.IsMoonEvent(*o)
-	sun := astro.NewSun(o)
+	oMidnight := astro.NewObserver(eph.Midnight, lat, lon)
+	if oMidnight == nil {
+		fmt.Println("Error when creating observer")
+		return
+	}
+	eph.Moon.IsMoonEvent = astro.IsMoonEvent(*oNow)
+	sun := astro.NewSun(oMidnight)
 	rise, transit, set, err := sun.ComputeTransit(astro.SunStdAlt)
 	if err != nil {
 		fmt.Printf("Error when computing sun's transit data : %s\n", err)
