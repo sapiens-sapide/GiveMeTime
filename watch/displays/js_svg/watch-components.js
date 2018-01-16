@@ -374,7 +374,7 @@ function getMinutesHandle() {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     //rounded rectangle
     const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    const thickness = dot * 8;
+    const thickness = dot * 7;
     setAttributes(r, {
         x: 0,
         y: -thickness / 2,
@@ -392,7 +392,7 @@ function getMinutesHandle() {
         d: `m${0.83 * radius} ${y} 
         l${x2} -${y} 
         l-${x2} -${y} 
-        l-${2.5 * x2} ${y} 
+        l-${1.9 * x2} ${y} 
         z`,
         fill: bluecolor,
         "fill-opacity": 1,
@@ -421,10 +421,10 @@ function getHourHandle() {
     setAttributes(l, {
         x1: 0,
         y1: 0,
-        x2: radius * 0.64,
+        x2: radius * 0.60,
         y2: 0,
         stroke: redcolor,
-        "stroke-width": dot * 11,
+        "stroke-width": dot * 12,
         "stroke-linecap": "round"
     });
     const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -456,7 +456,7 @@ function getNoonMark() {
 
     setAttributes(g, {
         cx: 0,
-        cy: -0.705,
+        cy: -0.685,
         r: unitbase * 0.25,
         fill: greycolor,
     });
