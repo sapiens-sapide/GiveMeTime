@@ -529,7 +529,7 @@ function getHLine() {
     return hLine;
 }
 
-function getButton1() {
+function getButtonSun() {
     const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
     setAttributes(txtG, {
         "class": "button"
@@ -556,7 +556,7 @@ function getButton1() {
     return txtG;
 }
 
-function getButton2() {
+function getButtonMoon() {
     const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
     const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     setAttributes(background, {
@@ -564,6 +564,7 @@ function getButton2() {
         cy: -radius * 0.3,
         r: unitbase * 4,
         fill: "#FFFFFF",
+        "class": "button"
     });
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
@@ -574,6 +575,30 @@ function getButton2() {
         style: `text-anchor: middle;font-family: ${fontFamily}`
     });
     txt.innerHTML = "Moon";
+    txtG.appendChild(background);
+    txtG.appendChild(txt);
+    return txtG;
+}
+
+function getButtonSet() {
+    const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    setAttributes(background, {
+        cx: 0,
+        cy: radius * 0.6,
+        r: unitbase * 4,
+        fill: "#FFFFFF",
+        "class": "button"
+    });
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    setAttributes(txt, {
+        "class": "buttonTxt",
+        x: 0,
+        y: radius * 0.7,
+        "font-size": unitbase * 3,
+        style: `text-anchor: middle;font-family: ${fontFamily}`
+    });
+    txt.innerHTML = "Set";
     txtG.appendChild(background);
     txtG.appendChild(txt);
     return txtG;

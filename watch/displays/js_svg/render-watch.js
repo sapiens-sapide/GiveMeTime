@@ -27,8 +27,9 @@ let sse = getSunSetElems(0, "");
 let sne = getSunNoonElems("");
 
 /** buttons components **/
-const b1 = getButton1();
-const b2 = getButton2();
+const bSun = getButtonSun();
+const bMoon = getButtonMoon();
+const bSet = getButtonSet();
 /** sync logic **/
 let ephemDaysLeft = -1; // how many days ahead are in local storage. -1 means no data for current day.
 let lastUpdate = new Date();
@@ -39,10 +40,11 @@ timeDisplayOn();
 
 /** buttons **/
 const svgButton = document.querySelector("#watchbuttons");
-svgButton.appendChild(b1);
-svgButton.appendChild(b2);
+svgButton.appendChild(bSun);
+svgButton.appendChild(bMoon);
+svgButton.appendChild(bSet);
 
-b1.addEventListener("click", function () {
+bSun.addEventListener("click", function () {
     if (timeOn) {
         timeDisplayOff();
         sunDisplayOn();
@@ -50,6 +52,10 @@ b1.addEventListener("click", function () {
         sunDisplayOff();
         timeDisplayOn();
     }
+});
+
+bSet.addEventListener("click", function () {
+    getLocation()
 });
 
 let today = {
@@ -62,8 +68,9 @@ let seconds = 60;
 let secInHour = 0;
 let secInDay = 0;
 const position = {
-    lon: -2.366944,
-    lat: 48.860833
+    lon: 2.366944,
+    lat: 48.860833,
+    update: 0,
 };
 //dayRendering(now, position);
 secondRendering();
@@ -95,7 +102,7 @@ function minuteRendering() {
     // TODO: get isMoonEvent boundaries for current day to prevent every 6 hours update
     if (ephemDaysLeft === -1 ||
         today.d !== today.now.getDate() ||
-        ((today.now - lastUpdate) / 3600000) > 6 ) {
+        ((today.now - lastUpdate) / 3600000) > 6) {
         dayRendering(position);
     }
     tc.innerHTML = `${hour < 10 ? "0" + hour : hour}   ${min < 10 ? "0" + min : min}`;
@@ -156,4 +163,19 @@ function updateSunData(syncSucceeded) {
         ephemDaysLeft = -1;
     }
     timeDisplayOn()
+}
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(updatePosition);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function updatePosition(data) {
+    position.lat = data.coords.latitude;
+    position.lon = data.coords.longitude;
+    position.update = new Date();
+    dayRendering(position);
 }

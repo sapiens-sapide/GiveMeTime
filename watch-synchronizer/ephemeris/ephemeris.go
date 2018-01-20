@@ -38,12 +38,12 @@ func EphemerisForDay(t time.Time, lat, lon float64) (eph DayEphemeris, err error
 	eph.Date = t
 	//get midnight for current date
 	eph.Midnight = t.Add(-(time.Duration(t.Hour()) * time.Hour) - (time.Duration(t.Minute()) * time.Minute) - (time.Duration(t.Second()) * time.Second))
-	oNow := astro.NewObserver(eph.Date, lat, lon)
+	oNow := astro.NewObserver(eph.Date, lat, -lon)
 	if oNow == nil {
 		fmt.Println("Error when creating observer")
 		return
 	}
-	oMidnight := astro.NewObserver(eph.Midnight, lat, lon)
+	oMidnight := astro.NewObserver(eph.Midnight, lat, -lon)
 	if oMidnight == nil {
 		fmt.Println("Error when creating observer")
 		return
