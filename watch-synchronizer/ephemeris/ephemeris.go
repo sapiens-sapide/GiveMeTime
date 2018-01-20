@@ -60,13 +60,13 @@ func EphemerisForDay(t time.Time, lat, lon float64) (eph DayEphemeris, err error
 	eph.Sun.Set = uint32(set)
 
 	// compute apparent sun at sunrise time
-	o_rise := astro.NewObserver(eph.Date.Add(time.Duration(uint64(rise))*time.Second), 48.860833, -2.366944)
+	o_rise := astro.NewObserver(eph.Midnight.Add(time.Duration(uint64(rise))*time.Second), 48.860833, -2.366944)
 	sun_rise := astro.NewSun(o_rise)
 	apparent_rise := sun_rise.ApparentPosition()
 	eph.Sun.RiseAz = float32(apparent_rise.Az)
 
 	// compute apparent sun at sunset time
-	o_set := astro.NewObserver(eph.Date.Add(time.Duration(uint64(set))*time.Second), 48.860833, -2.366944)
+	o_set := astro.NewObserver(eph.Midnight.Add(time.Duration(uint64(set))*time.Second), 48.860833, -2.366944)
 	sun_set := astro.NewSun(o_set)
 	apparent_set := sun_set.ApparentPosition()
 	eph.Sun.SetAz = float32(apparent_set.Az)
