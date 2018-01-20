@@ -31,7 +31,7 @@ const b1 = getButton1();
 const b2 = getButton2();
 /** sync logic **/
 let ephemDaysLeft = -1; // how many days ahead are in local storage. -1 means no data for current day.
-let lastUpdate = Date();
+let lastUpdate = new Date();
 
 svgEl.appendChild(wback);
 svgEl.appendChild(wb);
@@ -95,7 +95,7 @@ function minuteRendering() {
     // TODO: get isMoonEvent boundaries for current day to prevent every 6 hours update
     if (ephemDaysLeft === -1 ||
         today.d !== today.now.getDate() ||
-        (lastUpdate - today.now) / 3.6e6 > 6 ) {
+        ((today.now - lastUpdate) / 3600000) > 6 ) {
         dayRendering(position);
     }
     tc.innerHTML = `${hour < 10 ? "0" + hour : hour}   ${min < 10 ? "0" + min : min}`;
@@ -150,7 +150,7 @@ function updateSunData(syncSucceeded) {
         civilNightLength = getNightArc(sun.civilRise, sun.civilSet);
         nightLength = getNightArc(sun.rise, sun.set);
         ephemDaysLeft = 0; // TODO: manage local storage when more days will be provided by sync service
-        lastUpdate = Date.now();
+        lastUpdate = new Date();
         mooncomp = getMoon(moon.isMoonEvent)
     } else {
         ephemDaysLeft = -1;
