@@ -582,6 +582,9 @@ function getButtonMoon() {
 
 function getButtonSet() {
     const txtG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    setAttributes(txtG, {
+        "class": "button"
+    });
     const background = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     setAttributes(background, {
         cx: 0,
