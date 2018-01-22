@@ -30,6 +30,7 @@ let sne = getSunNoonElems("");
 const bSun = getButtonSun();
 const bMoon = getButtonMoon();
 const bSet = getButtonSet();
+const txtPosition = getTxtPosition();
 /** sync logic **/
 let ephemDaysLeft = -1; // how many days ahead are in local storage. -1 means no data for current day.
 let lastUpdate = new Date();
@@ -43,6 +44,7 @@ const svgButton = document.querySelector("#watchbuttons");
 svgButton.appendChild(bSun);
 svgButton.appendChild(bMoon);
 svgButton.appendChild(bSet);
+svgButton.appendChild(txtPosition);
 
 bSun.addEventListener("click", function () {
     if (timeOn) {
@@ -135,6 +137,7 @@ function dayRendering(position) {
     today.wd = today.now.getDay();
     wdc[1].innerHTML = weekDays[today.wd];
     dc[1].innerHTML = `${today.d < 10 ? " " + today.d : today.d}`;
+    txtPosition.innerHTML=`lat: ${position.lat.toPrecision(5)}° lon: ${position.lon.toPrecision(5)}°`;
     getEphemeris(today.now, position, updateSunData);
 }
 

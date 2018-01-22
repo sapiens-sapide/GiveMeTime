@@ -603,3 +603,17 @@ function getButtonSet() {
     txtG.appendChild(txt);
     return txtG;
 }
+
+function getTxtPosition() {
+    const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    setAttributes(txt, {
+        "class": "positionTxt",
+        "id": "position-container",
+        x: 0,
+        y: - radius * 0.2,
+        "font-size": unitbase * 3,
+        style: `text-anchor: middle;font-family: ${fontFamily}`
+    });
+    txt.innerHTML = "default position";
+    return txt;
+}
