@@ -138,7 +138,7 @@ function getHoursCircle() {
     //group for hours name, slightly shifted to the bottom
     const hg = document.createElementNS("http://www.w3.org/2000/svg", "g");
     setAttributes(hg, {
-        transform: `translate(0, ${unitbase * 0.2})`
+        transform: `translate(0.001, ${unitbase * 0.2})`
     });
     for (let i = 0; i < 24; i++) {
         // hours
@@ -293,7 +293,7 @@ function getTimeContainer() {
 function getWeekDayContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
-        x: -0.02 * radius,
+        x: -0.03 * radius,
         y: -0.25 * radius,
         style: `
         text-anchor: end;
@@ -317,7 +317,7 @@ function getWeekDayContainer() {
 function getDateContainer() {
     const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
     setAttributes(txt, {
-        x: 0.02 * radius,
+        x: 0.03 * radius,
         y: -0.23 * radius,
         style: `
         text-anchor: start;
@@ -425,19 +425,27 @@ function getHourHandle() {
         y2: 0,
         stroke: redcolor,
         "stroke-width": dot * 12,
-        "stroke-linecap": "round"
+        "stroke-linecap": "round",
+        "fill-opacity": 0
     });
-    const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    setAttributes(c, {
-        cx: radius - unitbase * 0.585,
-        cy: 0,
-        r: unitbase * 0.47,
-        stroke: redcolor,
+    const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    w = dot * 15;
+    h = dot * 11;
+    x = radius - ( dot * 17.5);
+    setAttributes(r, {
+        x: x,
+        y: -h / 2,
+        rx: dot * 4,
+        ry: dot * 4,
+        width: w,
+        height: h,
+        "fill": "white",
         "fill-opacity": 0,
-        "stroke-width": dot * 2,
+        stroke: redcolor,
+        "stroke-width": dot
     });
+    hg.append(r);
     hg.appendChild(l);
-    hg.appendChild(c);
     return hg;
 }
 
@@ -466,16 +474,22 @@ function getNoonMark() {
 
 function getMoon(isMoonEvent) {
     if (isMoonEvent && isMoonEvent !== 0) {
-        const moon = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        const moon = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         const fill = isMoonEvent === 1 ? "transparent" : "#999999";
-        setAttributes(moon, {
+        const dash = isMoonEvent === 1 ? "0.003,0.008" : "";
+        const strokeOp = isMoonEvent === 1 ? "0.8" : "1";
+        setAttributes(c, {
             cx: 0,
             cy: 0.3,
             r: unitbase * 0.7,
             fill: fill,
             stroke: "#4D4D4D",
             "stroke-width": dot,
+            "stroke-dasharray": dash,
+            "stroke-opacity": strokeOp
         });
+        moon.appendChild(c);
         return moon;
     }
     return document.createElement("div");

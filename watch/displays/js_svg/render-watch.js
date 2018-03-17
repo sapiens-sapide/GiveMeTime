@@ -70,8 +70,8 @@ let seconds = 60;
 let secInHour = 0;
 let secInDay = 0;
 const position = {
-    lon: 2.366944,
-    lat: 48.860833,
+    lon: 2.0,
+    lat: 48.0,
     update: 0,
 };
 //dayRendering(now, position);
@@ -81,7 +81,7 @@ setInterval(() => {
 }, 1000);
 
 function secondRendering() {
-    //today.now = new Date("2018-08-03T13:34:00");
+    //today.now = new Date("2018-03-02T00:00:00");
     today.now = new Date();
     if ((today.now.getSeconds() - seconds > 1) || (hour !== today.now.getHours()) || (min !== today.now.getMinutes())) {
         minuteRendering();
